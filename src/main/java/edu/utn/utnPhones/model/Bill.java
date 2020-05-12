@@ -8,7 +8,7 @@ public class Bill {
     private Integer idBill;
     private PhoneLine phoneLine;
     private Integer callsAmount;
-    private BigDecimal costPrice;
+    private BigDecimal totalCost;
     private BigDecimal totalPrice;
     private LocalDateTime billDate;
     private LocalDateTime billDateExpiration;
