@@ -31,8 +31,13 @@ public class User {
     private String userName;
     @NotNull
     private String pwd;
+
+    public enum UserType{
+        employee, client
+    }
     @NotNull
-    private String userType;
+    private UserType userType;
+
     @NotNull
     private Boolean removedUser;
 }

@@ -20,12 +20,19 @@ public class PhoneLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPhoneLine;
-
     private User user;
     @NotNull
     private String phoneNumber;
+
+    public enum LineType{
+        mobile, home
+    }
     @NotNull
-    private String lineType;
+    private LineType lineType;
+
+    public enum State{
+        register, suspended, removed
+    }
     @NotNull
-    private String removedPhoneLine;
+    private State removedPhoneLine;
 }
