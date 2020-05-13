@@ -1,5 +1,5 @@
 package edu.utn.utnPhones.model;
 
-public enum State{
+public enum PhoneLineStatus {
     register, suspended, removed
 }
