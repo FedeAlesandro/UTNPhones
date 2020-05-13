@@ -32,9 +32,6 @@ public class User {
     @NotNull
     private String pwd;
 
-    public enum UserType{
-        employee, client
-    }
     @NotNull
     private UserType userType;
 

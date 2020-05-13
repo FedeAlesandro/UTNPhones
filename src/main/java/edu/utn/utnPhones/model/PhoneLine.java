@@ -24,15 +24,9 @@ public class PhoneLine {
     @NotNull
     private String phoneNumber;
 
-    public enum LineType{
-        mobile, home
-    }
     @NotNull
     private LineType lineType;
 
-    public enum State{
-        register, suspended, removed
-    }
     @NotNull
     private State removedPhoneLine;
 }
