@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/utn_phones
+    username: root
+    password:
+  jpa:
+    hibernate:
+      format_sql: true
+      ddl-auto: create-drop
+    show-sql: true
