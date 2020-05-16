@@ -66,6 +66,6 @@ public class User {
     @Column(name = "removed_user")
     private Boolean removedUser;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private List<PhoneLine> phoneLines;
 }
