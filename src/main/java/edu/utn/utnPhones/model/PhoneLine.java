@@ -49,9 +49,12 @@ public class PhoneLine {
     @Enumerated(EnumType.STRING)
     private PhoneLineStatus removedPhoneLine;
 
-    @OneToMany(mappedBy = "phone_lines")
+    @OneToMany(mappedBy = "phoneLine")
     private List<Bill> bills;
 
-    @OneToMany(mappedBy = "phone_lines")
-    private List<PhoneCall> phoneCalls;
+    @OneToMany(mappedBy = "idOriginPhoneLine")
+    private List<PhoneCall> originPhoneCalls;
+
+    @OneToMany(mappedBy = "idDestinationPhoneLine")
+    private List<PhoneCall> destinationPhoneCalls;
 }

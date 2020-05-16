@@ -40,7 +40,7 @@ public class Bill {
     @JsonBackReference
     private PhoneLine phoneLine;
 
-    @OneToMany(mappedBy = "bills")
+    @OneToMany(mappedBy = "bill")
     private List<PhoneCall> calls;
 
     @NotNull

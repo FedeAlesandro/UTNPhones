@@ -44,7 +44,9 @@ public class City {
     @Column(name = "area_code")
     private String areaCode;
 
-    @OneToMany(mappedBy = "cities")
-    private List<Tariff>tariffs;
+    @OneToMany(mappedBy = "originCity")
+    private List<Tariff> originTariffs;
 
+    @OneToMany(mappedBy = "destinationCity")
+    private List<Tariff> DestinationTariffs;
 }
