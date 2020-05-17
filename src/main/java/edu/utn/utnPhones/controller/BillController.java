@@ -24,12 +24,12 @@ public class BillController {
     }
 
     @GetMapping
-    public List<Bill> getBills(){
-        return billService.getBills();
+    public List<Bill> getAll(){
+        return billService.getAll();
     }
 
     @PostMapping
-    public void addBill(@RequestBody @Valid Bill bill){
-        billService.addBill(bill);
+    public void add(@RequestBody @Valid Bill bill){
+        billService.add(bill);
     }
 }

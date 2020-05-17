@@ -17,11 +17,11 @@ public class TariffService {
         this.tariffRepository = tariffRepository;
     }
 
-    public List<Tariff> getTariffs() {
+    public List<Tariff> getAll() {
         return tariffRepository.findAll();
     }
 
-    public void addTariff(Tariff tariff) {
+    public void add(Tariff tariff) {
         tariffRepository.save(tariff);
     }
 }

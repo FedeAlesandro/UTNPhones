@@ -30,7 +30,7 @@ public class PhoneLine {
     @Id
     @Column(name = "id_phone_line")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idPhoneLine;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
@@ -47,7 +47,7 @@ public class PhoneLine {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private PhoneLineStatus removedPhoneLine;
+    private PhoneLineStatus status;
 
     @OneToMany(mappedBy = "phoneLine")
     private List<Bill> bills;

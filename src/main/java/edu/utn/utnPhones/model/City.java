@@ -29,7 +29,7 @@ public class City {
     @Id
     @Column(name = "id_city")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCity;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,7 +38,7 @@ public class City {
 
     @NotNull
     @Column(name = "city_name")
-    private String cityName;
+    private String name;
 
     @NotNull
     @Column(name = "area_code")

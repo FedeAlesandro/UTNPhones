@@ -17,11 +17,11 @@ public class PhoneCallService {
         this.phoneCallRepository = phoneCallRepository;
     }
 
-    public List<PhoneCall> getPhoneCalls() {
+    public List<PhoneCall> getAll() {
         return phoneCallRepository.findAll();
     }
 
-    public void addPhoneCall(PhoneCall phoneCall) {
+    public void add(PhoneCall phoneCall) {
         phoneCallRepository.save(phoneCall);
     }
 }

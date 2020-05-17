@@ -28,7 +28,7 @@ public class PhoneCall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_phone_call")
-    private Integer idPhoneCall;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -75,6 +75,6 @@ public class PhoneCall {
 
     @NotNull
     @Column(name = "date_call")
-    private LocalDate callDate;
+    private LocalDate date;
 
 }
