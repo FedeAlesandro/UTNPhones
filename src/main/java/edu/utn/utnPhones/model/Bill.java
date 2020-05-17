@@ -32,7 +32,7 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_bill")
-    private Integer idBill;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -57,11 +57,11 @@ public class Bill {
 
     @NotNull
     @Column(name = "bill_date")
-    private LocalDateTime billDate;
+    private LocalDateTime date;
 
     @NotNull
     @Column(name = "bill_expiration")
-    private LocalDateTime billDateExpiration;
+    private LocalDateTime dateExpiration;
 
     @NotNull
     @Enumerated(EnumType.STRING)

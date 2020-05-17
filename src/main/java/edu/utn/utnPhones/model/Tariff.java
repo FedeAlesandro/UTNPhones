@@ -26,7 +26,7 @@ public class Tariff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tariff")
-    private Integer idTariff;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)

@@ -24,12 +24,12 @@ public class TariffController {
     }
 
     @GetMapping
-    public List<Tariff> getTariffs(){
-        return tariffService.getTariffs();
+    public List<Tariff> getAll(){
+        return tariffService.getAll();
     }
 
     @PostMapping
-    public void addTariff(@RequestBody @Valid Tariff tariff){
-        tariffService.addTariff(tariff);
+    public void add(@RequestBody @Valid Tariff tariff){
+        tariffService.add(tariff);
     }
 }

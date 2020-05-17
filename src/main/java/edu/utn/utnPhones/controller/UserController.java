@@ -1,7 +1,7 @@
 package edu.utn.utnPhones.controller;
 
-import edu.utn.utnPhones.model.PhoneCall;
-import edu.utn.utnPhones.service.PhoneCallService;
+import edu.utn.utnPhones.model.User;
+import edu.utn.utnPhones.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,23 +13,23 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/calls")
-public class PhoneCallController {
+@RequestMapping("/users")
+public class UserController {
 
-    private PhoneCallService phoneCallService;
+    private UserService userService;
 
     @Autowired
-    public PhoneCallController(PhoneCallService phoneCallService){
-        this.phoneCallService = phoneCallService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<PhoneCall> getAll(){
-        return phoneCallService.getAll();
+    public List<User> getAll(){
+        return userService.getAll();
     }
 
     @PostMapping
-    public void add(@RequestBody @Valid PhoneCall phoneCall){
-        phoneCallService.add(phoneCall);
+    public void add(@RequestBody @Valid User user){
+        userService.add(user);
     }
 }

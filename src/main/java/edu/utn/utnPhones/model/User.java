@@ -30,7 +30,7 @@ public class User {
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUser;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -64,7 +64,7 @@ public class User {
 
     @NotNull
     @Column(name = "removed_user")
-    private Boolean removedUser;
+    private Boolean removed;
 
     @OneToMany(mappedBy = "user")
     private List<PhoneLine> phoneLines;

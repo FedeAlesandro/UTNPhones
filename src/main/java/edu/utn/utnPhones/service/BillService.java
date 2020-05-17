@@ -17,11 +17,11 @@ public class BillService {
         this.billRepository = billRepository;
     }
 
-    public List<Bill> getBills() {
+    public List<Bill> getAll() {
         return billRepository.findAll();
     }
 
-    public void addBill(Bill bill) {
+    public void add(Bill bill) {
         billRepository.save(bill);
     }
 }

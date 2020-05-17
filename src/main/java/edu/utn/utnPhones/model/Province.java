@@ -22,9 +22,9 @@ public class Province {
     @Id
     @Column(name = "id_province")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idProvince;
+    private Integer id;
 
     @NotNull
     @Column(name = "province_name")
-    private String provinceName;
+    private String name;
 }
