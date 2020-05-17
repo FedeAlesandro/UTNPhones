@@ -34,6 +34,7 @@ public class City {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_province", referencedColumnName = "id_province")
+    @JsonBackReference(value = "cityProvince")
     private Province province;
 
     @NotNull

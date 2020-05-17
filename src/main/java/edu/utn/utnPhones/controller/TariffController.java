@@ -23,12 +23,12 @@ public class TariffController {
         this.tariffService = tariffService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Tariff> getAll(){
         return tariffService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid Tariff tariff){
         tariffService.add(tariff);
     }

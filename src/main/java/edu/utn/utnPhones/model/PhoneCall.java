@@ -33,24 +33,24 @@ public class PhoneCall {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_origin_phone_line", referencedColumnName = "id_phone_line")
-    @JsonBackReference
+    @JsonBackReference(value = "callOriginPhoneLine")
     private PhoneLine idOriginPhoneLine;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_destination_phone_line", referencedColumnName = "id_phone_line")
-    @JsonBackReference
+    @JsonBackReference(value = "callDestinationPhoneLine")
     private PhoneLine idDestinationPhoneLine;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_tariff", referencedColumnName = "id_tariff")
-    @JsonBackReference
+    @JsonBackReference(value = "callTariff")
     private Tariff tariff;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_bill", referencedColumnName = "id_bill")
-    @JsonBackReference
+    @JsonBackReference(value = "callBill")
     private Bill bill;
 
     @NotNull

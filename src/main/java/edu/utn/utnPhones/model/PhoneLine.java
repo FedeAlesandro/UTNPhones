@@ -34,7 +34,7 @@ public class PhoneLine {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
-    @JsonBackReference
+    @JsonBackReference(value = "phoneLineUser")
     private User user;
 
     @NotNull

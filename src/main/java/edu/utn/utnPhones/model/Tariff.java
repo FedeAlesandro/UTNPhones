@@ -31,13 +31,13 @@ public class Tariff {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_origin_city", referencedColumnName = "id_city")
-    @JsonBackReference
+    @JsonBackReference(value = "tariffOriginCity")
     private City originCity;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_destination_city", referencedColumnName = "id_city")
-    @JsonBackReference
+    @JsonBackReference(value = "tariffDestinationCity")
     private City destinationCity;
 
     @NotNull

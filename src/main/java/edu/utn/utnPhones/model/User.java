@@ -35,7 +35,7 @@ public class User {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_city", referencedColumnName = "id_city")
-    @JsonBackReference
+    @JsonBackReference(value = "userCity")
     private City city;
 
     @NotNull
