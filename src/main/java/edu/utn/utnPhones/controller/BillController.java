@@ -23,12 +23,12 @@ public class BillController {
         this.billService = billService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Bill> getAll(){
         return billService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid Bill bill){
         billService.add(bill);
     }

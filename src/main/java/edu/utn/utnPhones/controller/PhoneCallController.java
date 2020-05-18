@@ -23,12 +23,12 @@ public class PhoneCallController {
         this.phoneCallService = phoneCallService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<PhoneCall> getAll(){
         return phoneCallService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid PhoneCall phoneCall){
         phoneCallService.add(phoneCall);
     }

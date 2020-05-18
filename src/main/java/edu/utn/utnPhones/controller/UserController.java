@@ -23,12 +23,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<User> getAll(){
         return userService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid User user){
         userService.add(user);
     }

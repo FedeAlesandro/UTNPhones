@@ -23,12 +23,12 @@ public class PhoneLineController {
         this.phoneLineService = phoneLineService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<PhoneLine> getAll(){
         return phoneLineService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid PhoneLine phoneLine){
         phoneLineService.add(phoneLine);
     }

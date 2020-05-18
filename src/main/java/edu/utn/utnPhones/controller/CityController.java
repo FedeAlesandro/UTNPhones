@@ -23,12 +23,12 @@ public class CityController {
         this.cityService = cityService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<City> getAll(){
         return cityService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public void add(@RequestBody @Valid City city){
         cityService.add(city);
     }
