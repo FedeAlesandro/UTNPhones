@@ -2,9 +2,11 @@ package edu.utn.utnPhones.service;
 
 import edu.utn.utnPhones.dao.PhoneCallRepository;
 import edu.utn.utnPhones.model.PhoneCall;
+import edu.utn.utnPhones.projections.CallsByDateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,5 +25,9 @@ public class PhoneCallService {
 
     public void add(PhoneCall phoneCall) {
         phoneCallRepository.save(phoneCall);
+    }
+
+    public List<CallsByDateRange> getCallsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
+        return phoneCallRepository.getCallsByDateRange(idUser, date1, date2);
     }
 }

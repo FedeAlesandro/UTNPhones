@@ -47,23 +47,23 @@ public class Bill {
     @Column(name = "calls_amount")
     private Integer callsAmount;
 
-    @NotNull
+    //@NotNull
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    @NotNull
+    //@NotNull
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @NotNull
+    //@NotNull
     @Column(name = "bill_date")
     private LocalDateTime date;
 
-    @NotNull
+    //@NotNull
     @Column(name = "bill_expiration")
     private LocalDateTime dateExpiration;
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private BillStatus state;
 
