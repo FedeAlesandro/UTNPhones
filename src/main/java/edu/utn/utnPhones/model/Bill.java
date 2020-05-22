@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -57,11 +57,11 @@ public class Bill {
 
     //@NotNull
     @Column(name = "bill_date")
-    private LocalDateTime date;
+    private LocalDate date;
 
     //@NotNull
     @Column(name = "bill_expiration")
-    private LocalDateTime dateExpiration;
+    private LocalDate dateExpiration;
 
     //@NotNull
     @Enumerated(EnumType.STRING)

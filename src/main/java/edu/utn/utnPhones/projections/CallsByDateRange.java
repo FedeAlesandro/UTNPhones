@@ -7,13 +7,9 @@ public interface CallsByDateRange {
 
     String getUsername();
 
-    Integer getId();
-
-    BigDecimal getTotalCost();
-
     BigDecimal getTotalPrice();
 
-    Integer duration();
+    Integer getDuration();
 
-    LocalDate date();
+    LocalDate getDate();
 }

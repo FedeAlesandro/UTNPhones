@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface BillRepository extends JpaRepository<Bill,Integer> {
 
-    @Query(value = "u.user_name userName, b.id_bill id, b.calls_amount callsAmount, b.total_cost totalCost, b.total_price totalPrice, b.bill_date date, b.bill_expiration dateExpiration, b.state state\n" +
+    @Query(value = "select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration\n" +
             "from bills as b\n" +
             "join phone_lines as pl\n" +
             "on b.id_phone_line=pl.id_phone_line\n" +
             "join users as u\n" +
             "on pl.id_user = u.id_user\n" +
-            "where u.id_user = ?1 AND pc.date_call BETWEEN ?2 AND ?3\n" +
-            "group by (u.user_name);", nativeQuery = true)
+            "where u.id_user = ?1 AND b.bill_date  BETWEEN ?2 AND ?3 ;"
+            , nativeQuery = true)
     List<BillsByDateRange> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2);
 }

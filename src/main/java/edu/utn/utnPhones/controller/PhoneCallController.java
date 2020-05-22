@@ -4,6 +4,7 @@ import edu.utn.utnPhones.model.PhoneCall;
 import edu.utn.utnPhones.projections.CallsByDateRange;
 import edu.utn.utnPhones.service.PhoneCallService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,9 @@ public class PhoneCallController {
     }
 
     @GetMapping("/{idUser}/")
-    public List<CallsByDateRange> getCallsByDateRange(@PathVariable(value = "idUser") Integer idUser, @RequestParam(value = "date1") LocalDate date1, @RequestParam(value = "date2") LocalDate date2){
+    public List<CallsByDateRange> getCallsByDateRange(@PathVariable(value = "idUser") Integer idUser,
+                                                      @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
+                                                      @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
         return phoneCallService.getCallsByDateRange(idUser, date1, date2);
     }
 

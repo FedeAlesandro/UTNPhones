@@ -1,25 +1,17 @@
 package edu.utn.utnPhones.projections;
 
-import edu.utn.utnPhones.model.BillStatus;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public interface BillsByDateRange {
 
     String getUsername();
 
-    Integer getId();
-
-    Integer callsAmount();
-
-    BigDecimal getTotalCost();
+    Integer getCallsAmount();
 
     BigDecimal getTotalPrice();
 
-    LocalDateTime getDate();
+    LocalDate getDate();
 
-    LocalDateTime getDateExpiration();
-
-    BillStatus getState();
+    LocalDate getDateExpiration();
 }

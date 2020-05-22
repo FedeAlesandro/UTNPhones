@@ -4,6 +4,7 @@ import edu.utn.utnPhones.model.Bill;
 import edu.utn.utnPhones.projections.BillsByDateRange;
 import edu.utn.utnPhones.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,9 @@ public class BillController {
     }
 
     @GetMapping("/{idUser}/")
-    public List<BillsByDateRange> getBillsByDateRange(@PathVariable(value = "idUser") Integer idUser, @RequestParam(value = "date1") LocalDate date1, @RequestParam(value = "date2") LocalDate date2){
+    public List<BillsByDateRange> getBillsByDateRange(@PathVariable(value = "idUser") Integer idUser,
+                                                      @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
+                                                      @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
         return billService.getBillsByDateRange(idUser, date1, date2);
     }
 
