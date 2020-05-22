@@ -2,6 +2,7 @@ package edu.utn.utnPhones.controller;
 
 import edu.utn.utnPhones.model.PhoneCall;
 import edu.utn.utnPhones.projections.CallsByDateRange;
+import edu.utn.utnPhones.projections.MostCalledDestination;
 import edu.utn.utnPhones.service.PhoneCallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,5 +44,10 @@ public class PhoneCallController {
     @PostMapping("/")
     public void add(@RequestBody @Valid PhoneCall phoneCall){
         phoneCallService.add(phoneCall);
+    }
+
+    @GetMapping("/destinations")
+    public List<MostCalledDestination> getMostCalledDestinations(@RequestParam Integer id_user){
+        return phoneCallService.getMostCalledDestinations(id_user);
     }
 }
