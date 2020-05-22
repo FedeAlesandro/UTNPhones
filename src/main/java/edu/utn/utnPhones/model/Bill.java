@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -47,23 +47,23 @@ public class Bill {
     @Column(name = "calls_amount")
     private Integer callsAmount;
 
-    @NotNull
+    //@NotNull
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    @NotNull
+    //@NotNull
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @NotNull
+    //@NotNull
     @Column(name = "bill_date")
-    private LocalDateTime date;
+    private LocalDate date;
 
-    @NotNull
+    //@NotNull
     @Column(name = "bill_expiration")
-    private LocalDateTime dateExpiration;
+    private LocalDate dateExpiration;
 
-    @NotNull
+    //@NotNull
     @Enumerated(EnumType.STRING)
     private BillStatus state;
 

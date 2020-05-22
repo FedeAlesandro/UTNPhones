@@ -21,7 +21,7 @@ create table users(
     name varchar(50),
     last_name varchar(50),
     dni varchar(10),
-    user_name varchar(40) unique,
+    user_name varchar(40),
     pwd varchar(40),
     user_type enum('employee', 'client'),
 	removed_user boolean, -- baja logica
@@ -53,8 +53,8 @@ create table bills(
     calls_amount int,
     total_cost decimal,
     total_price decimal,
-    bill_date datetime,
-    bill_expiration datetime,
+    bill_date date,
+    bill_expiration date,
     state enum('payed', 'expired'), #paga o vencida, puse state porque status es reservada
 	constraint pk_id_bill primary key (id_bill),
     constraint fk_bills_phone_line foreign key (id_phone_line) references phone_lines (id_phone_line)
@@ -77,3 +77,21 @@ create table bills(
     constraint fk_phone_calls_origin_phone_line foreign key (id_origin_phone_line) references phone_lines(id_phone_line),
 	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line ) references phone_lines(id_phone_line)
 );
+
+SET GLOBAL time_zone = '-3:00';
+
+select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
+from bills as b
+join phone_lines as pl
+on b.id_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1 AND b.bill_date BETWEEN  "2020-04-02" AND "2020-05-03";
+
+select u.user_name userName, pc.total_price totalPrice, pc.duration duration, pc.date_call date
+from phone_calls as pc
+join phone_lines as pl
+on pc.id_origin_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1 AND pc.date_call BETWEEN "2020-04-02" AND "2020-05-03";

@@ -47,14 +47,14 @@ public class PhoneLine {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private PhoneLineStatus status;
+    private PhoneLineStatus state;
 
     @OneToMany(mappedBy = "phoneLine")
     private List<Bill> bills;
 
-    @OneToMany(mappedBy = "idOriginPhoneLine")
+    @OneToMany(mappedBy = "originPhoneLine")
     private List<PhoneCall> originPhoneCalls;
 
-    @OneToMany(mappedBy = "idDestinationPhoneLine")
+    @OneToMany(mappedBy = "destinationPhoneLine")
     private List<PhoneCall> destinationPhoneCalls;
 }
