@@ -28,10 +28,11 @@ public class PhoneCallService {
         phoneCallRepository.save(phoneCall);
     }
 
-    public List<CallsByDateRange> getCallsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
+    public List<CallsByDateRange> getCallsByDateRange(Integer idUser, LocalDate date1, LocalDate date2) {
         return phoneCallRepository.getCallsByDateRange(idUser, date1, date2);
-      
-    public List<MostCalledDestination> getMostCalledDestinations(Integer id){
-        return phoneCallRepository.getMostCalledDestinations(id);
+    }
+
+    public List<MostCalledDestination> getMostCalledDestinations(Integer idUser){
+        return phoneCallRepository.getMostCalledDestinations(idUser);
     }
 }
