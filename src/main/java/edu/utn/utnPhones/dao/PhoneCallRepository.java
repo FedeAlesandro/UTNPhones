@@ -27,5 +27,5 @@ public interface PhoneCallRepository extends JpaRepository<PhoneCall,Integer> {
             " on pc.id_destination_phone_line = pld.id_phone_line join phone_lines plo" +
             " on pc.id_origin_phone_line = plo.id_phone_line join users u on u.id_user = plo.id_user" +
             " where u.id_user = ?1 group by pld.phone_number order by count(*) desc limit 10", nativeQuery = true)
-    List<MostCalledDestination> getMostCalledDestinations(Integer id);
+    List<MostCalledDestination> getMostCalledDestinations(Integer idUser);
 }

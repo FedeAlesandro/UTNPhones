@@ -46,8 +46,8 @@ public class PhoneCallController {
         phoneCallService.add(phoneCall);
     }
 
-    @GetMapping("/destinations")
-    public List<MostCalledDestination> getMostCalledDestinations(@RequestParam Integer id_user){
-        return phoneCallService.getMostCalledDestinations(id_user);
+    @GetMapping("/{idUser}/destinations")
+    public List<MostCalledDestination> getMostCalledDestinations(@PathVariable(value = "idUser") Integer idUser){
+        return phoneCallService.getMostCalledDestinations(idUser);
     }
 }
