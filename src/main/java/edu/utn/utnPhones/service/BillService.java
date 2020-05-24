@@ -2,8 +2,8 @@ package edu.utn.utnPhones.service;
 
 import edu.utn.utnPhones.dao.BillRepository;
 import edu.utn.utnPhones.model.Bill;
-import edu.utn.utnPhones.projections.BillsByDateRange;
-import edu.utn.utnPhones.projections.CallsByDateRange;
+import edu.utn.utnPhones.projections.BillsForUsers;
+import edu.utn.utnPhones.projections.BillsWithoutPhoneCalls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +20,23 @@ public class BillService {
         this.billRepository = billRepository;
     }
 
-    public List<Bill> getAll() {
-        return billRepository.findAll();
+    public List<BillsWithoutPhoneCalls> getBills() {
+        return billRepository.getBills();
     }
 
     public void add(Bill bill) {
         billRepository.save(bill);
     }
 
-    public List<BillsByDateRange> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
+    public List<BillsForUsers> getBillsByUser(Integer idUser){
+        return billRepository.getBillsByUser(idUser);
+    }
+
+    public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
         return billRepository.getBillsByDateRange(idUser, date1, date2);
+    }
+
+    public List<Bill> getBillsByPhoneLine(Integer idPhoneLine) {
+        return billRepository.findByIdPhoneLine(idPhoneLine);
     }
 }
