@@ -24,4 +24,16 @@ public class PhoneLineService {
     public void add (PhoneLine phoneLine){
         phoneLineRepository.save(phoneLine);
     }
+
+    public void register(Integer id) {
+        phoneLineRepository.register(id);
+    }
+
+    public void suspend (Integer id){
+        phoneLineRepository.suspend(id);
+    }
+
+    public void remove (Integer id){
+        phoneLineRepository.remove(id);
+    }
 }

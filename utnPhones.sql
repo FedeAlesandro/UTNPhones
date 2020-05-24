@@ -1,6 +1,7 @@
 create database utn_phones;
 use utn_phones;
 #drop database utn_phones;
+SET GLOBAL time_zone = '-3:00';
 
 create table provinces(
 	id_province int auto_increment,
@@ -78,8 +79,6 @@ create table bills(
 	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line ) references phone_lines(id_phone_line)
 );
 
-SET GLOBAL time_zone = '-3:00';
-
 select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
 from bills as b
 join phone_lines as pl
@@ -95,3 +94,11 @@ on pc.id_origin_phone_line=pl.id_phone_line
 join users as u
 on pl.id_user = u.id_user
 where u.id_user = 1 AND pc.date_call BETWEEN "2020-04-02" AND "2020-05-03";
+
+select u.user_name userName, pc.total_cost totalCost, pc.total_price totalPrice, pc.duration duration, pc.date_call date
+from phone_calls as pc
+join phone_lines as pl
+on pc.id_origin_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1;

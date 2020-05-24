@@ -2,6 +2,7 @@ package edu.utn.utnPhones.controller;
 
 import edu.utn.utnPhones.model.PhoneCall;
 import edu.utn.utnPhones.projections.CallsByDateRange;
+import edu.utn.utnPhones.projections.CallsByUser;
 import edu.utn.utnPhones.projections.MostCalledDestination;
 import edu.utn.utnPhones.service.PhoneCallService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class PhoneCallController {
         return phoneCallService.getAll();
     }
 
-    @GetMapping("/{idUser}/")
+    @GetMapping("/{idUser}/dateRange")
     public List<CallsByDateRange> getCallsByDateRange(@PathVariable(value = "idUser") Integer idUser,
                                                       @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
                                                       @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
@@ -49,5 +50,10 @@ public class PhoneCallController {
     @GetMapping("/{idUser}/destinations")
     public List<MostCalledDestination> getMostCalledDestinations(@PathVariable(value = "idUser") Integer idUser){
         return phoneCallService.getMostCalledDestinations(idUser);
+    }
+
+    @GetMapping("/{idUser}/")
+    public List<CallsByUser> getByUser(@PathVariable(value = "idUser") Integer idUser){
+        return phoneCallService.getByUser(idUser);
     }
 }
