@@ -22,7 +22,7 @@ create table users(
     name varchar(50),
     last_name varchar(50),
     dni varchar(10),
-    user_name varchar(40),
+    user_name varchar(40) unique,
     pwd varchar(40),
     user_type enum('employee', 'client'),
 	removed_user boolean, -- baja logica
