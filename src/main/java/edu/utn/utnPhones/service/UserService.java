@@ -77,12 +77,5 @@ public class UserService {
         }
 
         userRepository.save(oldUser);
-        /*
-        if (userRepository.existsById(idUser)){
-            updatedUser.setId(idUser);
-            userRepository.save(updatedUser);
-        } else {
-            throw new RuntimeException(); //Aca va una excepcion creada por nosotros
-        }*/
     }
 }
