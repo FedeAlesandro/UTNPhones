@@ -3,15 +3,17 @@ package edu.utn.utnPhones.projections;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public interface BillsByDateRange {
-
-    String getUsername();
+public interface BillsWithoutPhoneCalls {
 
     Integer getCallsAmount();
 
+    BigDecimal getTotalCost();
+
     BigDecimal getTotalPrice();
 
-    LocalDate getDate();
+    LocalDate getBillDate();
 
-    LocalDate getDateExpiration();
+    LocalDate getBillExpiration();
+
+    String getState();
 }

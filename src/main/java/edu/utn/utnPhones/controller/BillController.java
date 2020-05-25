@@ -1,7 +1,8 @@
 package edu.utn.utnPhones.controller;
 
 import edu.utn.utnPhones.model.Bill;
-import edu.utn.utnPhones.projections.BillsByDateRange;
+import edu.utn.utnPhones.projections.BillsForUsers;
+import edu.utn.utnPhones.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,16 +29,30 @@ public class BillController {
         this.billService = billService;
     }
 
+    //Get general sin lista de llamadas
     @GetMapping("/")
-    public List<Bill> getAll(){
-        return billService.getAll();
+    public List<BillsWithoutPhoneCalls> getBills(){
+        return billService.getBills();
     }
 
+    //Lista de facturas para el usuario
     @GetMapping("/{idUser}/")
-    public List<BillsByDateRange> getBillsByDateRange(@PathVariable(value = "idUser") Integer idUser,
-                                                      @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
-                                                      @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
+    public List<BillsForUsers> getBillsByUser(@PathVariable(value = "idUser") Integer idUser){
+        return billService.getBillsByUser(idUser);
+    }
+
+    //Lista de facturas por rango de fecha para el usuario
+    @GetMapping("/{idUser}/daterange/")
+    public List<BillsForUsers> getBillsByDateRange(@PathVariable(value = "idUser") Integer idUser,
+                                                   @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
+                                                   @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
         return billService.getBillsByDateRange(idUser, date1, date2);
+    }
+
+    //Lista de facturas por linea (muestra lista de llamadas por factura)
+    @GetMapping("/{idPhoneLine}/phoneline")
+    public List<Bill> getBillsByPhoneLine(@PathVariable(value = "idPhoneLine") Integer idPhoneLine){
+        return billService.getBillsByPhoneLine(idPhoneLine);
     }
 
     @PostMapping("/")
