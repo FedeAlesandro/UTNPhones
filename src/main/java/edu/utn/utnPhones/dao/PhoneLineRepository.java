@@ -18,10 +18,10 @@ public interface PhoneLineRepository extends JpaRepository<PhoneLine, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update phone_lines set state='suspended' where id_phone_line = ?1 ;", nativeQuery = true)
-    public void suspend(Integer id);
+    void suspend(Integer id);
 
     @Modifying
     @Transactional
     @Query(value = "update phone_lines set state='removed' where id_phone_line = ?1 ;", nativeQuery = true)
-    public void remove(Integer id);
+    void remove(Integer id);
 }
