@@ -3,6 +3,7 @@ package edu.utn.utnPhones.service;
 import edu.utn.utnPhones.dao.PhoneCallRepository;
 import edu.utn.utnPhones.model.PhoneCall;
 import edu.utn.utnPhones.projections.CallsByDateRange;
+import edu.utn.utnPhones.projections.CallsByUser;
 import edu.utn.utnPhones.projections.MostCalledDestination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,9 @@ public class PhoneCallService {
 
     public List<MostCalledDestination> getMostCalledDestinations(Integer idUser){
         return phoneCallRepository.getMostCalledDestinations(idUser);
+    }
+
+    public List<CallsByUser> getByUser(Integer idUser){
+        return phoneCallRepository.getByUser(idUser);
     }
 }
