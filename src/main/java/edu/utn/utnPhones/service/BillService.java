@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillService {
@@ -38,5 +39,12 @@ public class BillService {
 
     public List<Bill> getBillsByPhoneLine(Integer idPhoneLine) {
         return billRepository.findByIdPhoneLine(idPhoneLine);
+    }
+
+    public Bill getBillById(Integer idBill) {
+
+        return Optional.ofNullable(billRepository.findById(idBill))
+                .get()
+                .orElseThrow(RuntimeException::new); //Aca va una excepcion creada por nosotros
     }
 }

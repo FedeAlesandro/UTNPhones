@@ -36,7 +36,7 @@ public class BillController {
     }
 
     //Lista de facturas para el usuario
-    @GetMapping("/{idUser}/")
+    @GetMapping("/{idUser}/user/")
     public List<BillsForUsers> getBillsByUser(@PathVariable(value = "idUser") Integer idUser){
         return billService.getBillsByUser(idUser);
     }
@@ -50,7 +50,7 @@ public class BillController {
     }
 
     //Lista de facturas por linea (muestra lista de llamadas por factura)
-    @GetMapping("/{idPhoneLine}/phoneline")
+    @GetMapping("/{idPhoneLine}/phoneline/")
     public List<Bill> getBillsByPhoneLine(@PathVariable(value = "idPhoneLine") Integer idPhoneLine){
         return billService.getBillsByPhoneLine(idPhoneLine);
     }
@@ -58,5 +58,10 @@ public class BillController {
     @PostMapping("/")
     public void add(@RequestBody @Valid Bill bill){
         billService.add(bill);
+    }
+
+    @GetMapping("/{idBill}/")
+    public Bill getBillById(@PathVariable(value = "idBill") Integer idBill){
+        return billService.getBillById(idBill);
     }
 }

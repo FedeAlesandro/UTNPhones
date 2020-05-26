@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public List<ClientsWithoutPassword> getClients() {
-        return userRepository.findByUserType(UserType.client);
+        return userRepository.findByUserTypeAndRemoved(UserType.client, false);
     }
 
     public void remove(Integer idUser) {
