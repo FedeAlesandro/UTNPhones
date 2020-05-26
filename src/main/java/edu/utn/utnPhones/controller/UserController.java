@@ -35,7 +35,7 @@ public class UserController {
         return userService.getAll();
     }
 
-    //Listar clientes
+    //Listar clientes no eliminados
     @GetMapping("/clients/")
     public List<ClientsWithoutPassword> getClients(){
         return userService.getClients();

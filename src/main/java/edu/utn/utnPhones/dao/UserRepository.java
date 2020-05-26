@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                    ", u.removed_user removed, c.city_name cityName from users u join cities c on u.id_city = c.id_city ;", nativeQuery = true)
     List<UsersWithoutPassword> getAll();
 
-    List<ClientsWithoutPassword> findByUserType(UserType client);
+    List<ClientsWithoutPassword> findByUserTypeAndRemoved(UserType client, Boolean removed);
 }
