@@ -2,6 +2,7 @@ package edu.utn.utnPhones.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Table(name = "users")
+@Builder
 public class User {
 
     @Id

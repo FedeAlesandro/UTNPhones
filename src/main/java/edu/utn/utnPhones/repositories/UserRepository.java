@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -18,4 +19,19 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<UsersWithoutPassword> getAll();
 
     List<ClientsWithoutPassword> findByUserTypeAndRemoved(UserType client, Boolean removed);
+
+    User findByDniAndUserType(String dni, UserType userType);
+
+    Optional<User> findByIdAndRemoved(Integer idUser, boolean removed);
+
+    @Query(value = "select * " +
+            "from users u " +
+            "where u.dni = ?1 and u.user_type = ?2 and u.id_user <> ?3 ;", nativeQuery = true)
+    User findByIdAndDniAndUserType(String dni, UserType userType, Integer id);
+
+    @Query(value = "select * from users u where u.user_name = ?1 and u.removed_user = ?2 ;", nativeQuery = true)
+    User findByUserNameAndRemoved(String userName, boolean removed);
+
+    @Query(value = "select u.id_user idUser from users u where u.user_name = ?1 and u.removed_user = ?2 ;", nativeQuery = true)
+    Integer getIdByUserName(String userName, boolean removed);
 }
