@@ -71,7 +71,7 @@ create table bills(
 	total_cost decimal,
     total_price decimal, 
     duration int,
-	date_call date,
+	date_call datetime,
     constraint pk_id_phone_call primary key (id_phone_call),
     constraint fk_phone_calls_tariff foreign key (id_tariff) references tariffs (id_tariff),
     constraint fk_phone_calls_bills foreign key (id_bill) references bills (id_bill),
