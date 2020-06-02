@@ -14,12 +14,16 @@ import edu.utn.utnPhones.models.dtos.UserDtoPut;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.models.projections.UsersWithoutPassword;
 import edu.utn.utnPhones.utils.Constants;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class UserService {
 
@@ -36,11 +40,15 @@ public class UserService {
         return userRepository.getAll();
     }
 
-    //todo Revisar bien el add de nuevo por las dudas, pero creo que ya esta andando
+    public User getClient(String userName) {
+        return userRepository.findByUserNameAndRemovedAndUserType(userName, false, UserType.client)
+                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST_USERNAME));
+    }
+
     public User add(UserDtoAdd user){
 
         City city = cityRepository.findByNameAndAreaCodeAndProvince(user.getCity(), user.getAreaCode(), user.getProvince())
-                .orElseThrow(() -> new NotFoundException(Constants.CITY_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(Constants.LOCATION_NOT_EXIST));
 
         User newUser = User.builder().name(user.getName()).lastName(user.getLastName()).dni(user.getDni())
                         .userName(user.getUserName()).pwd(user.getPwd()).userType(user.getUserType())
@@ -73,38 +81,39 @@ public class UserService {
     public void remove(Integer idUser) {
 
         User deletedUser = userRepository.findByIdAndRemoved(idUser, false)
-                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST_ID));
 
         deletedUser.setRemoved(true);
         userRepository.save(deletedUser);
     }
 
-    /*public void update(Integer idUser, UserDtoPut updatedUser) {
+    public User update(Integer idUser, UserDtoPut updatedUser) {
 
         User oldUser = userRepository.findByIdAndRemoved(idUser, false)
-                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST_ID));
+        Integer testUser = userRepository.existsByIdAndDniAndUserTypeAndRemoved(idUser, updatedUser.getDni(), oldUser.getUserType(), false);
 
-        if (userRepository.findByIdAndDniAndUserType(updatedUser.getDni(), oldUser.getUserType(), oldUser.getId()) != null){
-            throw new UserAlreadyExistsException(Constants.NOT_UPDATED_USER);
+        if (userRepository.existsByIdAndDniAndUserTypeAndRemoved(idUser, updatedUser.getDni(), oldUser.getUserType(), false) > 0){
+            throw new UserAlreadyExistsException(Constants.NOT_UPDATED_USER); //todo cambiar en patch
         }
 
-        //todo Tener en cuenta que no se compare con el mismo
-        if (userRepository.findByUserNameAndRemoved(updatedUser.getUserName(), false) != null) {
+        if (userRepository.findByIdAndUserNameAndRemoved(updatedUser.getUserName(), false, idUser) != null) {
             throw new DuplicatedUsernameException(Constants.DUPLICATED_USERNAME);
         }
 
-        City city = cityRepository.findByNameAndAreaCodeAndProvince(updatedUser.getCity().getName(), updatedUser.getCity().getAreaCode(), updatedUser.getCity().getProvince().getName())
-                .orElseThrow(() -> new NotFoundException(Constants.CITY_NOT_EXIST));
+        City city = cityRepository.findByNameAndAreaCodeAndProvince(updatedUser.getCity(), updatedUser.getAreaCode(), updatedUser.getProvince())
+                .orElseThrow(() -> new NotFoundException(Constants.LOCATION_NOT_EXIST));
 
-        userRepository.save(User.builder().id(idUser).city(city)
+        return userRepository.save(User.builder().id(idUser).city(city) //todo cambiar en patch
                 .dni(updatedUser.getDni()).name(updatedUser.getName()).lastName(updatedUser.getLastName())
-                .pwd(updatedUser.getPwd()).userName(updatedUser.getUserName()).build());
+                .pwd(updatedUser.getPwd()).userName(updatedUser.getUserName()).removed(oldUser.getRemoved())
+                .userType(oldUser.getUserType()).phoneLines(oldUser.getPhoneLines()).build());
     }
 
-    public User partialUpdate(Integer idUser, UserDtoPatch user) {
+    /*public User partialUpdate(Integer idUser, UserDtoPatch user) {
 
         User oldUser = userRepository.findByIdAndRemoved(idUser, false)
-                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST_ID));
 
         if (user.getDni() != null) {
             if (userRepository.findByIdAndDniAndUserType(user.getDni(), oldUser.getUserType(), oldUser.getId()) != null) {
@@ -113,15 +122,15 @@ public class UserService {
         }
 
         if (user.getUserName() != null) {
-            if (userRepository.findByUserNameAndRemoved(user.getUserName(), false) != null) {
+            if (userRepository.findByIdAndUserNameAndRemoved(user.getUserName(), false, idUser) != null) {
                 throw new DuplicatedUsernameException(Constants.DUPLICATED_USERNAME);
             }
         }
 
         City city = null;
         if (user.getCity() != null) {
-            city = cityRepository.findByNameAndAreaCodeAndProvince(user.getCity().getName(), user.getCity().getAreaCode(), user.getCity().getProvince().getName())
-                    .orElseThrow(() -> new NotFoundException(Constants.CITY_NOT_EXIST));
+            city = cityRepository.findByNameAndAreaCodeAndProvince(user.getCity(), user.getAreaCode(), user.getProvince())
+                    .orElseThrow(() -> new NotFoundException(Constants.LOCATION_NOT_EXIST));
         }
 
         Optional.ofNullable(user.getName()).ifPresent(oldUser::setName);
@@ -133,4 +142,5 @@ public class UserService {
 
         return userRepository.save(oldUser);
     }*/
+
 }

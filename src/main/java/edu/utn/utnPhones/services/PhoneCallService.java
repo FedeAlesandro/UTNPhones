@@ -46,7 +46,7 @@ public class PhoneCallService {
     public List<CallsByDateRange> getCallsByDateRange(Integer idUser, Date date1, Date date2) {
 
         if (!userRepository.existsById(idUser)){
-            throw new NotFoundException(Constants.USER_NOT_EXIST);
+            throw new NotFoundException(Constants.USER_NOT_EXIST_ID);
         }
 
         return phoneCallRepository.getCallsByDateRange(idUser, date1, date2);
@@ -55,7 +55,7 @@ public class PhoneCallService {
     public List<MostCalledDestination> getMostCalledDestinations(Integer idUser){
 
         if (!userRepository.existsById(idUser)){
-            throw new NotFoundException(Constants.USER_NOT_EXIST);
+            throw new NotFoundException(Constants.USER_NOT_EXIST_ID);
         }
 
         return phoneCallRepository.getMostCalledDestinations(idUser);
@@ -64,7 +64,7 @@ public class PhoneCallService {
     public List<CallsByUser> getByUser(Integer idUser){
 
         if (!userRepository.existsById(idUser)){
-            throw new NotFoundException(Constants.USER_NOT_EXIST);
+            throw new NotFoundException(Constants.USER_NOT_EXIST_ID);
         }
 
         return phoneCallRepository.getByUser(idUser);

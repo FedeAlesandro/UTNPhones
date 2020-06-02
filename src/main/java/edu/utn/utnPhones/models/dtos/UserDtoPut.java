@@ -1,14 +1,11 @@
 package edu.utn.utnPhones.models.dtos;
 
-import edu.utn.utnPhones.models.City;
-import edu.utn.utnPhones.models.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -16,28 +13,28 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class UserDtoPut {
 
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message = "DNI is required")
     private String dni;
 
-    @NotBlank
+    @NotBlank(message = "Username is required")
     private String userName;
 
-    @NotBlank
+    @NotBlank(message = "A password is required")
     private String pwd;
 
-    @NotNull
+    @NotBlank(message = "City name is required")
     private String city;
 
-    @NotNull
+    @NotBlank(message = "A area code is required")
     private String areaCode;
 
-    @NotNull
+    @NotBlank(message = "Province name is required")
     private String province;
 
 }

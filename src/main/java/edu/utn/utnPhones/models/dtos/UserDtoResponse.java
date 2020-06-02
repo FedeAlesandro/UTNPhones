@@ -12,9 +12,14 @@ import lombok.NoArgsConstructor;
 public class UserDtoResponse {
 
     private Integer id;
+
     private String name;
+
     private String lastName;
+
     private String dni;
+
     private String userName;
+
     private CityDto city;
 }
