@@ -102,3 +102,10 @@ on pc.id_origin_phone_line=pl.id_phone_line
 join users as u
 on pl.id_user = u.id_user
 where u.id_user = 1;
+
+Delimiter //
+create trigger tbi_phone_calls before insert on phone_calls for each row
+begin
+	set new.date_call = now();
+end //
+drop trigger tbi_phone_calls;
