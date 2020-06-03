@@ -44,4 +44,7 @@ public interface PhoneCallRepository extends JpaRepository<PhoneCall,Integer> {
 
     @Query(value = "select pc.date_call dateCall from phone_calls pc where pc.id_phone_call = ?1 ;", nativeQuery = true)
     Date getDateById(Integer idPhoneCall);
+
+    @Query(value = "select * from phone_calls where duration between ?1 and ?2 ;", nativeQuery = true)
+    List<PhoneCall> getByDuration(Integer sinceDuration, Integer toDuration);
 }

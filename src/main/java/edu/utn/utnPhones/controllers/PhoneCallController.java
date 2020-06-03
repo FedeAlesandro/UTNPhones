@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/calls")
@@ -75,4 +76,17 @@ public class PhoneCallController {
                     .build());
     }
 
+    @GetMapping("/duration/")
+    public ResponseEntity<List<PhoneCallDtoResponse>> getByDuration(@RequestParam(value = "sinceDuration") Integer sinceDuration, @RequestParam(value = "toDuration") Integer toDuration){
+        List<PhoneCall>phoneCalls = phoneCallService.getByDuration(sinceDuration, toDuration);
+
+        List<PhoneCallDtoResponse> phoneCallResponses = phoneCalls.stream()
+                .map(PhoneCallDtoResponse::new)
+                .collect(Collectors.toList());
+
+        if (phoneCallResponses.isEmpty())
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.ok(phoneCallResponses);
+    }
 }

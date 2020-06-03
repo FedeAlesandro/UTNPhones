@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import edu.utn.utnPhones.models.PhoneCall;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +35,13 @@ public class PhoneCallDtoResponse {
     @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date date;
+
+    public PhoneCallDtoResponse(PhoneCall phoneCall){
+        id = phoneCall.getId();
+        duration = phoneCall.getDuration();
+        totalCost = phoneCall.getTotalCost();
+        totalPrice = phoneCall.getTotalPrice();
+        originPhoneNumber = phoneCall.getOriginPhoneNumber();
+        destinationPhoneNumber = phoneCall.getDestinationPhoneNumber();
+    }
 }

@@ -69,4 +69,13 @@ public class PhoneCallService {
 
         return phoneCallRepository.getByUser(idUser);
     }
+
+    public List<PhoneCall> getByDuration(Integer sinceDuration, Integer toDuration){
+        if(sinceDuration>toDuration){
+            Integer aux = sinceDuration;
+            sinceDuration = toDuration;
+            toDuration = aux;
+        }
+        return phoneCallRepository.getByDuration(sinceDuration, toDuration);
+    }
 }
