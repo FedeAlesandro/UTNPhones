@@ -6,7 +6,9 @@ import edu.utn.utnPhones.models.PhoneLineStatus;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.UserType;
 import edu.utn.utnPhones.models.dtos.PhoneLineAdd;
+import edu.utn.utnPhones.models.dtos.PhoneLineResponse;
 import edu.utn.utnPhones.models.dtos.PhoneLineUpdate;
+import edu.utn.utnPhones.models.projections.PhoneLineUser;
 import edu.utn.utnPhones.repositories.PhoneLineRepository;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.repositories.UserRepository;
@@ -97,4 +99,7 @@ public class PhoneLineService {
         phoneLineRepository.remove(id);
     }
 
+    public List<PhoneLineUser> getByUserName(String name) {
+        return phoneLineRepository.getByUserName(name);
+    }
 }

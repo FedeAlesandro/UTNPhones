@@ -7,6 +7,7 @@ import edu.utn.utnPhones.models.dtos.PhoneLineAdd;
 import edu.utn.utnPhones.models.dtos.PhoneLineByIdDto;
 import edu.utn.utnPhones.models.dtos.PhoneLineResponse;
 import edu.utn.utnPhones.models.dtos.PhoneLineUpdate;
+import edu.utn.utnPhones.models.projections.PhoneLineUser;
 import edu.utn.utnPhones.services.PhoneLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,12 @@ public class PhoneLineController {
                     .map(PhoneLineResponse::new)
                     .collect(Collectors.toList()));
         }
+    }
+
+    @GetMapping("/{name}/user/")
+    public ResponseEntity<List<PhoneLineUser>> getByUserName(@PathVariable(value = "name") String name){
+        List<PhoneLineUser> phoneLinesList = phoneLineService.getByUserName(name);
+        return phoneLinesList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(phoneLinesList) : ResponseEntity.ok().body(phoneLinesList);
     }
 
     @GetMapping("/all/")
