@@ -1,7 +1,12 @@
 package edu.utn.utnPhones.controllers;
 
+import edu.utn.utnPhones.exceptions.NotFoundException;
+import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
+import edu.utn.utnPhones.models.PhoneLine;
+import edu.utn.utnPhones.models.dtos.ErrorResponseDto;
 import edu.utn.utnPhones.models.dtos.NotValidFieldResponse;
 import edu.utn.utnPhones.models.dtos.NotValidResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +35,28 @@ public class ExceptionHandlerController {
                 .badRequest()
                 .body(NotValidResponse.builder()
                         .errors(responses)
+                        .build());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException exception){
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.builder()
+                        .message(exception.getMessage())
+                        .errorCode(1)
+                        .build());
+    }
+
+    @ExceptionHandler(PhoneLineRemovedException.class)
+    public ResponseEntity<ErrorResponseDto> PhoneLineRemovedException(PhoneLineRemovedException exception){
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.builder()
+                        .message(exception.getMessage())
+                        .errorCode(2)
                         .build());
     }
 }

@@ -57,19 +57,15 @@ public class PhoneCall {
     @Column(name = "duration")
     private Integer duration;
 
-    //@NotNull
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    //@NotNull
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    //@NotNull
     @Column(name = "origin_phone_number")
     private String originPhoneNumber;
 
-    //@NotNull
     @Column(name = "destination_phone_number")
     private String destinationPhoneNumber;
 

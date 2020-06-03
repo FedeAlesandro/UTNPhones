@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tariffs")
@@ -27,21 +26,17 @@ public class Tariff {
     @Column(name = "id_tariff")
     private Integer id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_origin_city", referencedColumnName = "id_city")
     private City originCity;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_destination_city", referencedColumnName = "id_city")
     private City destinationCity;
 
-    @NotNull
     @Column(name = "price_per_minute")
     private Float pricePerMinute;
 
-    @NotNull
     @Column(name = "cost_per_minute")
     private Float costPerMinute;
 

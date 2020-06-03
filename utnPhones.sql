@@ -102,3 +102,15 @@ on pc.id_origin_phone_line=pl.id_phone_line
 join users as u
 on pl.id_user = u.id_user
 where u.id_user = 1;
+
+select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
+            from bills as b
+            join phone_lines as pl
+            on b.id_phone_line=pl.id_phone_line
+            join users as u
+            on pl.id_user = u.id_user
+			where u.id_user = 1 ;
+            
+select * from bills;
+
+select * from phone_lines;
