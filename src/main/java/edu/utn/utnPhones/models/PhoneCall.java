@@ -18,8 +18,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -56,7 +59,8 @@ public class PhoneCall {
     @JsonBackReference(value = "callBill")
     private Bill bill;
 
-    @NotNull
+    @NotNull(message = "The call duration is required")
+    @Min(value = 0, message = "Incorrect duration")
     @Column(name = "duration")
     private Integer duration;
 
@@ -66,15 +70,18 @@ public class PhoneCall {
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    @NotBlank
+    @NotBlank(message = "An origin phone number is required")
+    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
+    @Size(min = 6, max = 32, message = "Invalid size for phone number")
     @Column(name = "origin_phone_number")
     private String originPhoneNumber;
 
-    @NotBlank
+    @NotBlank(message = "A destination phone number is required")
+    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
+    @Size(min = 6, max = 32, message = "Invalid size for phone number")
     @Column(name = "destination_phone_number")
     private String destinationPhoneNumber;
 
-    //@NotNull
     @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     @Column(name = "date_call")
