@@ -8,6 +8,7 @@ import edu.utn.utnPhones.models.dtos.BillsPhoneCallDto;
 import edu.utn.utnPhones.models.projections.BillsForUsers;
 import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.services.BillService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,11 @@ public class BillController {
     //Lista de facturas para el usuario
     @GetMapping("/{idUser}/user/")
     public ResponseEntity<List<BillsForUsers>> getBillsByUser(@PathVariable(value = "idUser") Integer idUser){
-        return ResponseEntity.ok(billService.getBillsByUser(idUser));
+        List<BillsForUsers>bills = billService.getBillsByUser(idUser);
+        if(bills.isEmpty())
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.ok(bills);
     }
 
     //Lista de facturas por rango de fecha para el usuario
@@ -77,8 +82,10 @@ public class BillController {
                     .collect(Collectors.toList());
             billsByPhoneLines.add(new BillsByPhoneLine(bill, calls));
         }
-
-        return ResponseEntity.ok(billsByPhoneLines);
+        if(billsByPhoneLines.isEmpty())
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.ok(billsByPhoneLines);
     }
 
     @GetMapping("/{idBill}/")

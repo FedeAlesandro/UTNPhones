@@ -3,14 +3,14 @@ package edu.utn.utnPhones.models.dtos;
 import edu.utn.utnPhones.models.PhoneCall;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class PhoneCallPhoneLineDto {
 
     private Integer id;
 
-    private LocalDate date;
+    private Date date;
 
     private String originPhoneNumber;
 
