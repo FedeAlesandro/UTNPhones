@@ -3,6 +3,9 @@ package edu.utn.utnPhones.controllers;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.models.PhoneLine;
+import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
+import edu.utn.utnPhones.exceptions.NotFoundException;
+import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.dtos.ErrorResponseDto;
 import edu.utn.utnPhones.models.dtos.NotValidFieldResponse;
 import edu.utn.utnPhones.models.dtos.NotValidResponse;
@@ -40,7 +43,6 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException exception){
-
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponseDto.builder()
@@ -51,12 +53,29 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(PhoneLineRemovedException.class)
     public ResponseEntity<ErrorResponseDto> PhoneLineRemovedException(PhoneLineRemovedException exception){
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseDto.builder()
                         .message(exception.getMessage())
                         .errorCode(2)
                         .build());
+    }
+
+    @ExceptionHandler(DuplicatedUsernameException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
+                .errorCode(3)
+                .message(exception.getMessage())
+                .build());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
+                .errorCode(4)
+                .message(exception.getMessage())
+                .build());
     }
 }
