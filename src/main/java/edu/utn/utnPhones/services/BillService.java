@@ -15,7 +15,6 @@ import java.util.List;
 
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_BILL;
 import static edu.utn.utnPhones.utils.Constants.BILL_NOT_FOUND_PHONE_LINE;
-import static edu.utn.utnPhones.utils.Constants.BILL_NOT_FOUND_USER;
 
 @Service
 public class BillService {
@@ -41,11 +40,7 @@ public class BillService {
         userRepository.findById(idUser)
                 .orElseThrow(() -> new NotFoundException("This user doesn't exist")); // todo pedirle constante a fabio
 
-        List<BillsForUsers> billsForUsers = billRepository.getBillsByUser(idUser);
-        if(billsForUsers.isEmpty()){
-            throw new NotFoundException(BILL_NOT_FOUND_USER);
-        }
-        return billsForUsers;
+        return billRepository.getBillsByUser(idUser);
     }
 
     public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
