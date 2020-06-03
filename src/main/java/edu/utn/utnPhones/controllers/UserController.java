@@ -102,7 +102,7 @@ public class UserController {
                     .build());
     }
 
-    /*@PatchMapping("/{idUser}/")
+    @PatchMapping("/{idUser}/")
     public ResponseEntity<UserDtoResponse> partialUpdate(@PathVariable(value = "idUser") Integer idUser, @RequestBody @Valid UserDtoPatch user){
         User updateUser = userService.partialUpdate(idUser, user);
         ProvinceDto provinceDto = ProvinceDto.builder().name(updateUser.getCity().getProvince().getName()).build();
@@ -115,5 +115,5 @@ public class UserController {
                     .userName(updateUser.getUserName())
                     .city(cityDto)
                     .build());
-    }*/
+    }
 }
