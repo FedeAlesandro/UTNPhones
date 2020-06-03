@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor
@@ -28,16 +27,13 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_province", referencedColumnName = "id_province")
     private Province province;
 
-    @NotNull
     @Column(name = "city_name")
     private String name;
 
-    @NotNull
     @Column(name = "area_code")
     private String areaCode;
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill,Integer> {
@@ -32,9 +33,9 @@ public interface BillRepository extends JpaRepository<Bill,Integer> {
                    "from bills b " +
                    "where b.id_phone_line = ?1 ;"
                    , nativeQuery = true)
-    List<Bill> findByIdPhoneLine(Integer idPhoneLine);
+    Optional<List<Bill>> findByIdPhoneLine(Integer idPhoneLine);
 
-    @Query(value = "select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration\n" +
+    @Query(value = "select u.user_name userName, b.calls_amount callsAmount, b.total_price totalPrice, b.bill_date date, b.bill_expiration dateExpiration\n" +
             "from bills as b\n" +
             "join phone_lines as pl\n" +
             "on b.id_phone_line=pl.id_phone_line\n" +

@@ -1,5 +1,8 @@
 package edu.utn.utnPhones.controllers;
 
+import edu.utn.utnPhones.exceptions.NotFoundException;
+import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
+import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
@@ -40,18 +43,29 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException exception){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.builder()
+                        .message(exception.getMessage())
+                        .errorCode(1)
+                        .build());
+    }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponseDto.builder()
-                .errorCode(1)
-                .message(exception.getMessage())
-                .build());
+    @ExceptionHandler(PhoneLineRemovedException.class)
+    public ResponseEntity<ErrorResponseDto> PhoneLineRemovedException(PhoneLineRemovedException exception){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.builder()
+                        .message(exception.getMessage())
+                        .errorCode(2)
+                        .build());
     }
 
     @ExceptionHandler(DuplicatedUsernameException.class)
     public ResponseEntity<ErrorResponseDto> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
-                .errorCode(2)
+                .errorCode(3)
                 .message(exception.getMessage())
                 .build());
     }
@@ -60,7 +74,7 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
-                .errorCode(3)
+                .errorCode(4)
                 .message(exception.getMessage())
                 .build());
     }

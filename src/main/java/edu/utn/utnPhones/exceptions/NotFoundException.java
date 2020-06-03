@@ -1,8 +1,8 @@
 package edu.utn.utnPhones.exceptions;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends RuntimeException{
 
-    public NotFoundException(String message){
+    public NotFoundException(String message) {
         super(message);
     }
 }

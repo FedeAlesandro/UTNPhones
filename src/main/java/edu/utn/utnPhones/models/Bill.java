@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +33,6 @@ public class Bill {
     @Column(name = "id_bill")
     private Integer id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_phone_line", referencedColumnName = "id_phone_line")
     @JsonBackReference(value = "billPhoneLine")
@@ -43,27 +41,21 @@ public class Bill {
     @OneToMany(mappedBy = "bill")
     private List<PhoneCall> calls;
 
-    @NotNull
     @Column(name = "calls_amount")
     private Integer callsAmount;
 
-    //@NotNull
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    //@NotNull
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    //@NotNull
     @Column(name = "bill_date")
     private LocalDate date;
 
-    //@NotNull
     @Column(name = "bill_expiration")
     private LocalDate dateExpiration;
 
-    //@NotNull
     @Enumerated(EnumType.STRING)
     private BillStatus state;
 

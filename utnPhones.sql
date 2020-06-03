@@ -108,4 +108,40 @@ create trigger tbi_phone_calls before insert on phone_calls for each row
 begin
 	set new.date_call = now();
 end //
-drop trigger tbi_phone_calls;
+// drop trigger tbi_phone_calls;
+
+select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
+from bills as b
+join phone_lines as pl
+on b.id_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1 AND b.bill_date BETWEEN  "2020-04-02" AND "2020-05-03";
+
+select u.user_name userName, pc.total_price totalPrice, pc.duration duration, pc.date_call date
+from phone_calls as pc
+join phone_lines as pl
+on pc.id_origin_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1 AND pc.date_call BETWEEN "2020-04-02" AND "2020-05-03";
+
+select u.user_name userName, pc.total_cost totalCost, pc.total_price totalPrice, pc.duration duration, pc.date_call date
+from phone_calls as pc
+join phone_lines as pl
+on pc.id_origin_phone_line=pl.id_phone_line
+join users as u
+on pl.id_user = u.id_user
+where u.id_user = 1;
+
+select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
+            from bills as b
+            join phone_lines as pl
+            on b.id_phone_line=pl.id_phone_line
+            join users as u
+            on pl.id_user = u.id_user
+			where u.id_user = 1 ;
+            
+select * from bills;
+
+select * from phone_lines;
