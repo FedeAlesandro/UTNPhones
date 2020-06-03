@@ -12,7 +12,5 @@ public interface ClientsWithoutPassword {
 
     String getUserName();
 
-    boolean getRemoved();
-
     String getCityName();
 }

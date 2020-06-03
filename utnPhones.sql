@@ -71,7 +71,7 @@ create table bills(
 	total_cost decimal,
     total_price decimal, 
     duration int,
-	date_call date,
+	date_call datetime,
     constraint pk_id_phone_call primary key (id_phone_call),
     constraint fk_phone_calls_tariff foreign key (id_tariff) references tariffs (id_tariff),
     constraint fk_phone_calls_bills foreign key (id_bill) references bills (id_bill),
@@ -102,3 +102,10 @@ on pc.id_origin_phone_line=pl.id_phone_line
 join users as u
 on pl.id_user = u.id_user
 where u.id_user = 1;
+
+Delimiter //
+create trigger tbi_phone_calls before insert on phone_calls for each row
+begin
+	set new.date_call = now();
+end //
+drop trigger tbi_phone_calls;
