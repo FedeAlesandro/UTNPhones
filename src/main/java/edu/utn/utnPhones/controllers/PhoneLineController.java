@@ -95,7 +95,7 @@ public class PhoneLineController {
     }
 
     @DeleteMapping("/{id}/")
-    public ResponseEntity<?> remove(@PathVariable(value = "id") Integer id){
+    public ResponseEntity<Void> remove(@PathVariable(value = "id") Integer id){
         phoneLineService.remove(id);
         return ResponseEntity.ok().build();
     }

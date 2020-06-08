@@ -18,6 +18,7 @@ import java.util.List;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_NOT_REMOVED;
 import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_REMOVED;
+import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
 @Service
 public class PhoneLineService {
@@ -52,10 +53,7 @@ public class PhoneLineService {
     public PhoneLine add (PhoneLineAdd phoneLineAdd){
 
         User user = userRepository.findById(phoneLineAdd.getUser().getId())
-                .orElseThrow(() -> new NotFoundException("User doesn't exist"));  //todo usar constante de fabio
-
-        if(user.getUserType().equals(UserType.employee))
-            throw new RuntimeException(); //todo fijarse si fabio tiene una excepcion ya en usuario para no hacerla again
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         PhoneLine oldPhoneLine = phoneLineRepository.findByPhoneNumber(phoneLineAdd.getPhoneNumber());
         PhoneLine phoneLine = PhoneLine.fromPhoneLineAdd(phoneLineAdd);
@@ -80,7 +78,7 @@ public class PhoneLineService {
             throw new PhoneLineRemovedException(PHONE_LINE_REMOVED);
 
         userRepository.findById(phoneLineUpdate.getUser().getId())
-                .orElseThrow(() -> new NotFoundException("User doesn't exist"));  //todo usar constante de fabio
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         phoneLine.setUser(phoneLineUpdate.getUser());
         phoneLine.setPhoneNumber(phoneLineUpdate.getPhoneNumber());
