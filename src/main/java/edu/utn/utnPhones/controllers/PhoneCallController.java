@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/calls")
 public class PhoneCallController {
 
-    private PhoneCallService phoneCallService;
+    private final PhoneCallService phoneCallService;
 
     @Autowired
     public PhoneCallController(PhoneCallService phoneCallService){

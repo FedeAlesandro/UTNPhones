@@ -145,3 +145,9 @@ select u.user_name userName, b.calls_amount callsAmount, b.total_price total_pri
 select * from bills;
 
 select * from phone_lines;
+
+select * from phone_calls;
+
+select * 
+from phone_calls
+where duration between 1 and 12;

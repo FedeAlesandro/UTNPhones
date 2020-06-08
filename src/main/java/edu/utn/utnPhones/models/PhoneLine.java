@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -37,22 +38,23 @@ public class PhoneLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "An user is required")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     @JsonBackReference(value = "phoneLineUser")
     private User user;
 
-    @NotBlank
-    @Size(min = 9, max = 12)
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
+    @Size(min = 7, max = 15, message = "Invalid size for a phone number")
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @NotNull
+    @NotNull(message = "Line type is required")
     @Enumerated(EnumType.STRING)
     private LineType lineType;
 
-    @NotNull
+    @NotNull(message = "Phone line state is required")
     @Enumerated(EnumType.STRING)
     private PhoneLineStatus state;
 

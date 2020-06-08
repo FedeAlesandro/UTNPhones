@@ -38,20 +38,14 @@ public class BillController {
     @GetMapping("/")
     public ResponseEntity<List<BillsWithoutPhoneCalls>> getBills(){
         List<BillsWithoutPhoneCalls>bills = billService.getBills();
-        if(bills.isEmpty())
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.ok(bills);
+        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
     }
 
     //Lista de facturas para el usuario
     @GetMapping("/{idUser}/user/")
     public ResponseEntity<List<BillsForUsers>> getBillsByUser(@PathVariable(value = "idUser") Integer idUser){
         List<BillsForUsers>bills = billService.getBillsByUser(idUser);
-        if(bills.isEmpty())
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.ok(bills);
+        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
     }
 
     //Lista de facturas por rango de fecha para el usuario
@@ -61,10 +55,7 @@ public class BillController {
                                                    @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
 
         List<BillsForUsers>bills = billService.getBillsByDateRange(idUser, date1, date2);
-        if(bills.isEmpty())
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.ok(billService.getBillsByDateRange(idUser, date1, date2));
+        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(billService.getBillsByDateRange(idUser, date1, date2));
     }
 
     //Lista de facturas por linea (muestra lista de llamadas por factura)
@@ -82,14 +73,11 @@ public class BillController {
                     .collect(Collectors.toList());
             billsByPhoneLines.add(new BillsByPhoneLine(bill, calls));
         }
-        if(billsByPhoneLines.isEmpty())
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.ok(billsByPhoneLines);
+        return billsByPhoneLines.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(billsByPhoneLines);
     }
 
     @GetMapping("/{idBill}/")
-    public ResponseEntity<?> getBillById(@PathVariable(value = "idBill") Integer idBill){
+    public ResponseEntity<BillByIdDTO> getBillById(@PathVariable(value = "idBill") Integer idBill){
         Bill bill = billService.getBillById(idBill);
 
         List<BillsByIdPhoneCallDto> calls = bill.getCalls()

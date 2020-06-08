@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_BILL;
 import static edu.utn.utnPhones.utils.Constants.BILL_NOT_FOUND_PHONE_LINE;
+import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
 @Service
 public class BillService {
@@ -38,7 +38,7 @@ public class BillService {
 
     public List<BillsForUsers> getBillsByUser(Integer idUser){
         userRepository.findById(idUser)
-                .orElseThrow(() -> new NotFoundException("This user doesn't exist")); // todo pedirle constante a fabio
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         return billRepository.getBillsByUser(idUser);
     }
