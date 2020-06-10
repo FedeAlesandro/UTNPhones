@@ -66,7 +66,7 @@ public class UserControllerTest {
                 .build();
 
         when(userService.getClient("Euvenias")).thenReturn(oldUser);
-        UserDtoResponse user = userController.getClient("Euvenias").getBody();
+        User user = userController.getClient("Euvenias");
         Assert.assertEquals(oldUser.getId(), user.getId());
     }
 

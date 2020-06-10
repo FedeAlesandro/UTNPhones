@@ -33,44 +33,24 @@ public class PhoneCallController {
         this.phoneCallService = phoneCallService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<PhoneCall>> getAll(){
-        List<PhoneCall> callsList = phoneCallService.getAll();
-        return callsList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(callsList) : ResponseEntity.ok().body(callsList);
+    public List<CallsByDateRange> getCallsByDateRange(Integer idUser, Date date1, Date date2){
+
+        return phoneCallService.getCallsByDateRange(idUser, date1, date2);
     }
 
-    @GetMapping("/{idUser}/dateRange")
-    public ResponseEntity<List<CallsByDateRange>> getCallsByDateRange(@PathVariable(value = "idUser") Integer idUser,
-                                                      @RequestParam(value = "date1") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date1,
-                                                      @RequestParam(value = "date2") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date2){
-        List<CallsByDateRange> callsList = phoneCallService.getCallsByDateRange(idUser, date1, date2);
-        return callsList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(callsList) : ResponseEntity.ok().body(callsList);
+    public List<MostCalledDestination> getMostCalledDestinations(Integer idUser) {
+
+        return phoneCallService.getMostCalledDestinations(idUser);
     }
 
-    @GetMapping("/{idUser}/destinations")
-    public ResponseEntity<List<MostCalledDestination>> getMostCalledDestinations(@PathVariable(value = "idUser") Integer idUser) {
-        List<MostCalledDestination> callsList = phoneCallService.getMostCalledDestinations(idUser);
-        return callsList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(callsList) : ResponseEntity.ok().body(callsList);
+    public List<CallsByUser> getByUser(Integer idUser){
+
+        return phoneCallService.getByUser(idUser);
     }
 
-    @GetMapping("/{idUser}/")
-    public ResponseEntity<List<CallsByUser>> getByUser(@PathVariable(value = "idUser") Integer idUser){
-        List<CallsByUser> callsList = phoneCallService.getByUser(idUser);
-        return callsList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(callsList) : ResponseEntity.ok().body(callsList);
-    }
+    public PhoneCall add(PhoneCallDtoAdd phoneCall){
 
-    @PostMapping("/") //
-    public ResponseEntity<PhoneCallDtoResponse> add(@RequestBody @Valid PhoneCallDtoAdd phoneCall){
-        PhoneCall addedCall = phoneCallService.add(phoneCall);
-        return ResponseEntity.created(URI.create("Localhost:8081")).body(PhoneCallDtoResponse.builder()
-                    .id(addedCall.getId())
-                    .originPhoneNumber(addedCall.getOriginPhoneNumber())
-                    .destinationPhoneNumber(addedCall.getDestinationPhoneNumber())
-                    .duration(addedCall.getDuration())
-                    .date(addedCall.getDate())
-                    .totalCost(addedCall.getTotalCost())
-                    .totalPrice(addedCall.getTotalPrice())
-                    .build());
+        return phoneCallService.add(phoneCall);
     }
 
 }
