@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static edu.utn.utnPhones.utils.Constants.EMPLOYEE_SESSION;
-import static edu.utn.utnPhones.utils.Constants.INFRASTRUCTURE_SESSION;
 
 @Service
 public class EmployeeSessionFilter extends OncePerRequestFilter {
