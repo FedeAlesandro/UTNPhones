@@ -17,10 +17,10 @@ public class MyConfiguration {
     SessionFilter sessionFilter;
 
     @Autowired
-    EmployeeSessionFilter superUserSessionFilter;
+    EmployeeSessionFilter employeeSessionFilter;
 
     @Autowired
-    InfrastructureSessionFilter antennaSessionFilter;
+    InfrastructureSessionFilter infrastructureSessionFilter;
 
     @Bean
     public FilterRegistrationBean mySessionFilter() {
@@ -33,7 +33,7 @@ public class MyConfiguration {
     @Bean
     public FilterRegistrationBean myEmployeeSessionFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(superUserSessionFilter);
+        registration.setFilter(employeeSessionFilter);
         registration.addUrlPatterns("/employee/*");
         return registration;
     }
@@ -41,7 +41,7 @@ public class MyConfiguration {
     @Bean
     public FilterRegistrationBean myInfrastructureSessionFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(antennaSessionFilter);
+        registration.setFilter(infrastructureSessionFilter);
         registration.addUrlPatterns("/infrastructure/*");
         return registration;
     }
