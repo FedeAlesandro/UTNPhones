@@ -2,6 +2,7 @@ package edu.utn.utnPhones.session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import static edu.utn.utnPhones.utils.Constants.EMPLOYEE_SESSION;
 import static edu.utn.utnPhones.utils.Constants.INFRASTRUCTURE_SESSION;
 
+@Service
 public class EmployeeSessionFilter extends OncePerRequestFilter {
 
     @Autowired
