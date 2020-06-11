@@ -17,6 +17,8 @@ public class Constants {
     public static final String NOT_UPDATED_USER = "Can't update the user, the given DNI is already in the system";
     public static final String DUPLICATED_USERNAME = "This username is not available";
 
+    public static final String NOT_FOUND_TARIFF = "Tariff not found";
+
     public static final String INFRASTRUCTURE_SESSION = "infrastructure";
     public static final String EMPLOYEE_SESSION = "employee";
 

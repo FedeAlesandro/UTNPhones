@@ -6,7 +6,6 @@ import edu.utn.utnPhones.models.Province;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.UserType;
 import edu.utn.utnPhones.models.dtos.ClientsWithoutPasswordTestImpl;
-import edu.utn.utnPhones.models.dtos.UserDtoResponse;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.services.UserService;
 import edu.utn.utnPhones.utils.Constants;

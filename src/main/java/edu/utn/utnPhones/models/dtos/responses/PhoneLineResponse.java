@@ -1,4 +1,4 @@
-package edu.utn.utnPhones.models.dtos;
+package edu.utn.utnPhones.models.dtos.responses;
 
 import edu.utn.utnPhones.models.LineType;
 import edu.utn.utnPhones.models.PhoneLine;

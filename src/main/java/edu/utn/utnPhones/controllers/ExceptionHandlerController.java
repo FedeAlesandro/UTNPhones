@@ -2,13 +2,11 @@ package edu.utn.utnPhones.controllers;
 
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
-import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
-import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
-import edu.utn.utnPhones.models.dtos.ErrorResponseDto;
-import edu.utn.utnPhones.models.dtos.NotValidFieldResponse;
-import edu.utn.utnPhones.models.dtos.NotValidResponse;
+import edu.utn.utnPhones.models.dtos.responses.ErrorResponseDto;
+import edu.utn.utnPhones.models.dtos.responses.NotValidFieldResponse;
+import edu.utn.utnPhones.models.dtos.responses.NotValidResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
