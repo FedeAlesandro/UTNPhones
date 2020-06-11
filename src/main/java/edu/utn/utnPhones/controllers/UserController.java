@@ -51,4 +51,9 @@ public class UserController {
 
         return userService.partialUpdate(idUser, user);
     }
+
+    public User login(String username, String pwd){
+
+        return userService.login(username, pwd);
+    }
 }
