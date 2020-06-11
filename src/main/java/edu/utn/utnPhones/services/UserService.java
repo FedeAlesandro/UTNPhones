@@ -20,6 +20,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.utn.utnPhones.utils.Constants.DUPLICATED_USERNAME;
+import static edu.utn.utnPhones.utils.Constants.LOCATION_NOT_EXIST;
+import static edu.utn.utnPhones.utils.Constants.NOT_ADDED_USER;
+import static edu.utn.utnPhones.utils.Constants.NOT_UPDATED_USER;
+import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
+import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST_ID;
+
 @Service
 public class UserService {
 
@@ -116,21 +123,26 @@ public class UserService {
         return userRepository.save(oldUser);
     }
 
+    public User login(String username, String pwd){
+
+        return userRepository.findByUserNameAndPwd(username, pwd)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+    }
 
     private City cityVerification(String city, String areaCode, String province){
         return cityRepository.findByNameAndAreaCodeAndProvince(city, areaCode, province)
-                .orElseThrow(() -> new NotFoundException(Constants.LOCATION_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(LOCATION_NOT_EXIST));
     }
 
     private void userNameVerification(String userName, Integer idUser){
 
         if (idUser == null) {
             if (userRepository.findByUserNameAndRemoved(userName, false) != null) {
-                throw new DuplicatedUsernameException(Constants.DUPLICATED_USERNAME);
+                throw new DuplicatedUsernameException(DUPLICATED_USERNAME);
             }
         } else {
             if (userRepository.findByIdAndUserNameAndRemoved(userName, false, idUser) != null) {
-                throw new DuplicatedUsernameException(Constants.DUPLICATED_USERNAME);
+                throw new DuplicatedUsernameException(DUPLICATED_USERNAME);
             }
         }
     }
@@ -143,7 +155,7 @@ public class UserService {
             if (previousUser.getRemoved()) {
                 return previousUser.getId();
             } else {
-                throw new UserAlreadyExistsException(Constants.NOT_ADDED_USER);
+                throw new UserAlreadyExistsException(NOT_ADDED_USER);
             }
         }
         return null;
@@ -151,7 +163,7 @@ public class UserService {
 
     private User idRemovedVerification(Integer idUser){
         return userRepository.findByIdAndRemoved(idUser, false)
-                .orElseThrow(() -> new NotFoundException(Constants.USER_NOT_EXIST_ID));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST_ID));
     }
 
     private void dniVerification(String dni, Integer idUser){
@@ -159,7 +171,7 @@ public class UserService {
         User previousUser = userRepository.findByDniAndId(dni, idUser);
 
         if (previousUser != null) {
-            throw new UserAlreadyExistsException(Constants.NOT_UPDATED_USER);
+            throw new UserAlreadyExistsException(NOT_UPDATED_USER);
         }
     }
 }

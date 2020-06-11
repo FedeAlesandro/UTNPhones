@@ -62,7 +62,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(DuplicatedUsernameException.class)
     public ResponseEntity<ErrorResponseDto> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
                 .errorCode(3)
                 .message(exception.getMessage())
                 .build());
@@ -71,7 +71,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponseDto.builder()
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
                 .errorCode(4)
                 .message(exception.getMessage())
                 .build());
