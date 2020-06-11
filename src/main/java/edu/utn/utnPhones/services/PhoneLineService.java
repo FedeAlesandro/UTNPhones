@@ -4,7 +4,6 @@ import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.models.PhoneLineStatus;
 import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.UserType;
 import edu.utn.utnPhones.models.dtos.PhoneLineAdd;
 import edu.utn.utnPhones.models.dtos.PhoneLineUpdate;
 import edu.utn.utnPhones.repositories.PhoneLineRepository;

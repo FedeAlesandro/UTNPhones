@@ -1,4 +1,4 @@
-package edu.utn.utnPhones.models.dtos;
+package edu.utn.utnPhones.models.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

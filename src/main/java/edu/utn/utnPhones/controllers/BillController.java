@@ -32,57 +32,19 @@ public class BillController {
     }
 
     //Get general sin lista de llamadas
-    @GetMapping("/")
-    public ResponseEntity<List<BillsWithoutPhoneCalls>> getBills(){
-        List<BillsWithoutPhoneCalls>bills = billService.getBills();
-        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
-    }
+    public List<BillsWithoutPhoneCalls> getBills(){
 
-    //todo fusionar getBillsByUser y getBillsByDateRange
-    //Lista de facturas para el usuario
-    @GetMapping("/user/{idUser}/")
-    public ResponseEntity<List<BillsForUsers>> getBillsByUser(@PathVariable(value = "idUser") Integer idUser){
-        List<BillsForUsers>bills = billService.getBillsByUser(idUser);
-        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
+        return billService.getBills();
     }
 
     //Lista de facturas por rango de fecha para el usuario
-    @GetMapping("/{idUser}/date-range/")
-    public ResponseEntity<List<BillsForUsers>> getBillsByDateRange(@PathVariable(value = "idUser") Integer idUser,
-                                                   @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
-                                                   @RequestParam(value = "date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
+    public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
 
-        List<BillsForUsers>bills = billService.getBillsByDateRange(idUser, date1, date2);
-        return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(billService.getBillsByDateRange(idUser, date1, date2));
+        return billService.getBillsByDateRange(idUser, date1, date2);
     }
 
-    //Lista de facturas por linea (muestra lista de llamadas por factura)
-    @GetMapping("/phone-line/{idPhoneLine}/")
-    public ResponseEntity<List<BillsByPhoneLine>> getBillsByPhoneLine(@PathVariable(value = "idPhoneLine") Integer idPhoneLine){
+    public Bill getBillById(Integer idBill){
 
-        List<Bill>bills = billService.getBillsByPhoneLine(idPhoneLine);
-        List<BillsByPhoneLine>billsByPhoneLines = new ArrayList<>();
-        List<BillsPhoneCallDto> calls = new ArrayList<>();
-
-        for(Bill bill : bills){
-            calls = bill.getCalls()
-            .stream()
-            .map(BillsPhoneCallDto::new)
-                    .collect(Collectors.toList());
-            billsByPhoneLines.add(new BillsByPhoneLine(bill, calls));
-        }
-        return billsByPhoneLines.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(billsByPhoneLines);
-    }
-
-    @GetMapping("/{idBill}/")
-    public ResponseEntity<BillByIdDTO> getBillById(@PathVariable(value = "idBill") Integer idBill){
-        Bill bill = billService.getBillById(idBill);
-
-        List<BillsByIdPhoneCallDto> calls = bill.getCalls()
-                .stream()
-                .map(BillsByIdPhoneCallDto::new)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new BillByIdDTO(bill, calls));
+        return billService.getBillById(idBill);
     }
 }

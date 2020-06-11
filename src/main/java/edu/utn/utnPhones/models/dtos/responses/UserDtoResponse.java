@@ -1,5 +1,6 @@
-package edu.utn.utnPhones.models.dtos;
+package edu.utn.utnPhones.models.dtos.responses;
 
+import edu.utn.utnPhones.models.dtos.CityDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

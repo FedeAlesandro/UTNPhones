@@ -3,7 +3,7 @@ package edu.utn.utnPhones.controllers.web;
 import edu.utn.utnPhones.controllers.PhoneCallController;
 import edu.utn.utnPhones.models.PhoneCall;
 import edu.utn.utnPhones.models.dtos.PhoneCallDtoAdd;
-import edu.utn.utnPhones.models.dtos.PhoneCallDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.PhoneCallDtoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
