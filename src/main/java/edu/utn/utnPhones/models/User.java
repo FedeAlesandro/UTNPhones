@@ -95,7 +95,7 @@ public class User {
                 .dni(userDtoAdd.getDni())
                 .userName(userDtoAdd.getUserName())
                 .pwd(userDtoAdd.getPwd())
-                .userType(userDtoAdd.getUserType())
+                .userType(UserType.getUserType(userDtoAdd.getUserType()))
                 .city(city)
                 .removed(false)
                 .phoneLines(null)

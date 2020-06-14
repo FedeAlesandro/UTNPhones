@@ -29,7 +29,7 @@ public class InfrastructureSessionFilter extends OncePerRequestFilter {
         session = sessionManager.getSession(sessionToken);
 
         if (null != session){
-            if(INFRASTRUCTURE_SESSION.equals(sessionToken))
+            if(INFRASTRUCTURE_SESSION.equals(session.getLoggedUser().getUserType().name()))
                 filterChain.doFilter(request, response);
             else
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());

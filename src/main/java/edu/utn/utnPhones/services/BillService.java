@@ -26,6 +26,10 @@ public class BillService {
 
     public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
 
+        if (date2 == null) {
+            date2 = LocalDate.now();
+        }
+
         return billRepository.getBillsByDateRange(idUser, date1, date2);
     }
 

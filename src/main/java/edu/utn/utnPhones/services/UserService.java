@@ -2,6 +2,7 @@ package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
+import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
@@ -23,8 +24,9 @@ import static edu.utn.utnPhones.utils.Constants.DUPLICATED_USERNAME;
 import static edu.utn.utnPhones.utils.Constants.LOCATION_NOT_EXIST;
 import static edu.utn.utnPhones.utils.Constants.NOT_ADDED_USER;
 import static edu.utn.utnPhones.utils.Constants.NOT_UPDATED_USER;
-import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST_ID;
+import static edu.utn.utnPhones.utils.Constants.UNAUTHORIZED_USER_HANDLING;
+import static edu.utn.utnPhones.utils.Constants.LOGIN_FAILED;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +49,8 @@ public class UserService {
 
     public User add(UserDtoAdd user){
 
+        userTypeVerification(UserType.getUserType(user.getUserType()));
+
         City city = cityVerification(user.getCity(), user.getAreaCode(), user.getProvince());
 
         User newUser = User.fromUserDtoAdd(user, city);
@@ -64,6 +68,9 @@ public class UserService {
     public void remove(Integer idUser) {
 
         User deletedUser = idRemovedVerification(idUser);
+
+        userTypeVerification(deletedUser.getUserType());
+
         deletedUser.setRemoved(true);
 
         userRepository.save(deletedUser);
@@ -72,6 +79,8 @@ public class UserService {
     public User update(Integer idUser, UserDtoPut updatedUser) {
 
         User oldUser = idRemovedVerification(idUser);
+
+        userTypeVerification(oldUser.getUserType());
 
         dniVerification(updatedUser.getDni(), idUser);
 
@@ -85,6 +94,8 @@ public class UserService {
     public User partialUpdate(Integer idUser, UserDtoPatch updatedUser) {
 
         User oldUser = idRemovedVerification(idUser);
+
+        userTypeVerification(oldUser.getUserType());
 
         if (updatedUser.getDni() != null){
             dniVerification(updatedUser.getDni(), idUser);
@@ -111,8 +122,8 @@ public class UserService {
 
     public User login(String username, String pwd){
 
-        return userRepository.findByUserNameAndPwd(username, pwd)
-                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+        return userRepository.findByUserNameAndPwdAndRemoved(username, pwd, false)
+                .orElseThrow(() -> new NotFoundException(LOGIN_FAILED));
     }
 
     private City cityVerification(String city, String areaCode, String province){
@@ -133,6 +144,13 @@ public class UserService {
             if (userRepository.findByIdAndUserNameAndRemoved(userName, false, idUser) != null) {
                 throw new DuplicatedUsernameException(DUPLICATED_USERNAME);
             }
+        }
+    }
+
+    private void userTypeVerification(UserType userType){
+
+        if (userType.equals(UserType.infrastructure) || userType.equals(UserType.employee)) {
+            throw new UnauthorizedUserTypeException(UNAUTHORIZED_USER_HANDLING);
         }
     }
 

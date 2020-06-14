@@ -41,7 +41,7 @@ public class UserDtoPut {
     private String pwd;
 
     @NotBlank(message = "City is required")
-    @Pattern(regexp = "[0-9a-zA-Z]+", message = "Cities should contain only letters or numbers")
+    @Pattern(regexp = "[0-9a-zA-Z ]+", message = "Cities should contain only letters or numbers")
     @Size(min = 4, max = 60, message = "Invalid size for city")
     private String city;
 
@@ -51,7 +51,7 @@ public class UserDtoPut {
     private String areaCode;
 
     @NotBlank(message = "Province is required")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Provinces should contain only letters")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "Provinces should contain only letters")
     @Size(min = 4, max = 40, message = "Invalid size for province")
     private String province;
 }

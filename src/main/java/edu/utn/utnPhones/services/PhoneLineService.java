@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_NOT_REMOVED;
@@ -31,15 +32,13 @@ public class PhoneLineService {
        return phoneLineRepository.getAll();
     }
 
-    public PhoneLine getById(Integer id) {
+    public List<PhoneLine> getByUserName(String userName) {
 
-        PhoneLine phoneLine = phoneLineRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
+        List<PhoneLine> phoneLines = phoneLineRepository.findByUserName(userName, false);
 
-        if (phoneLine.getState().equals(PhoneLineStatus.removed))
-            throw new PhoneLineRemovedException(PHONE_LINE_REMOVED);
-
-        return phoneLine;
+        return phoneLines.stream()
+                .filter(phoneLine -> !phoneLine.getState().equals(PhoneLineStatus.removed))
+                .collect(Collectors.toList());
     }
 
     public PhoneLine add (PhoneLineDtoAdd phoneLineAdd){

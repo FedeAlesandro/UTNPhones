@@ -1,15 +1,11 @@
 package edu.utn.utnPhones.models.dtos.requests;
 
-import edu.utn.utnPhones.models.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -44,12 +40,13 @@ public class UserDtoAdd {
     @Size(min = 8, max = 40, message = "Invalid size for password")
     private String pwd;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+    @NotBlank(message = "User type is required")
+    @Pattern(regexp = "[a-z]+", message = "User type should contain lower case letters only")
+    @Size(min = 6, max = 14, message = "Invalid size for user type")
+    private String userType;
 
     @NotBlank(message = "City is required")
-    @Pattern(regexp = "[0-9a-zA-Z]+", message = "Cities should contain only letters or numbers")
+    @Pattern(regexp = "[0-9a-zA-Z ]+", message = "Cities should contain only letters or numbers")
     @Size(min = 4, max = 60, message = "Invalid size for city")
     private String city;
 
@@ -59,7 +56,7 @@ public class UserDtoAdd {
     private String areaCode;
 
     @NotBlank(message = "Province is required")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Provinces should contain only letters")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "Provinces should contain only letters")
     @Size(min = 4, max = 40, message = "Invalid size for province")
     private String province;
 }

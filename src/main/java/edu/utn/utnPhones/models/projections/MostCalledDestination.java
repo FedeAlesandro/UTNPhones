@@ -4,7 +4,7 @@ public interface MostCalledDestination {
 
     String getPhoneNumber();
 
-    String getUsername();
+    String getName();
 
     Integer getCallsCount();
 }

@@ -69,7 +69,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(user));
     }
 
-    @PostMapping("/users/")
+    @PostMapping("/clients/")
     public ResponseEntity<UserDtoResponse> addUser(@RequestBody @Valid UserDtoAdd user){
 
         User addedUser = userController.add(user);
@@ -77,7 +77,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(addedUser));
     }
 
-    @DeleteMapping("/users/{idUser}/")
+    @DeleteMapping("/clients/{idUser}/")
     public ResponseEntity<Void> removeUser(@PathVariable(value = "idUser") Integer idUser){
 
         userController.remove(idUser);
@@ -85,7 +85,7 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/users/{idUser}/")
+    @PutMapping("/clients/{idUser}/")
     public ResponseEntity<UserDtoResponse> updateUser(@PathVariable(value = "idUser") Integer idUser, @RequestBody @Valid UserDtoPut user){
 
         User updatedUser = userController.update(idUser, user);
@@ -93,7 +93,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(updatedUser));
     }
 
-    @PatchMapping("/users/{idUser}/")
+    @PatchMapping("/clients/{idUser}/")
     public ResponseEntity<UserDtoResponse> partialUpdateUser(@PathVariable(value = "idUser") Integer idUser, @RequestBody @Valid UserDtoPatch user){
 
         User updatedUser = userController.partialUpdate(idUser, user);
@@ -127,6 +127,29 @@ public class EmployeeController {
         phoneLineController.remove(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/phone-lines/")
+    public ResponseEntity<List<PhoneLineDtoResponse>> getPhoneLines(@RequestParam(value = "userName", required = false) String userName){
+
+        List<PhoneLineDtoResponse> phoneLines;
+        if (userName == null) {
+
+            phoneLines = phoneLineController.getAll()
+                    .stream()
+                    .map(PhoneLineDtoResponse::fromPhoneLine)
+                    .collect(Collectors.toList());
+
+
+        } else {
+
+            phoneLines = phoneLineController.getByUserName(userName)
+                    .stream()
+                    .map(PhoneLineDtoResponse::fromPhoneLine)
+                    .collect(Collectors.toList());
+        }
+
+        return phoneLines.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(phoneLines) : ResponseEntity.ok(phoneLines);
     }
 
     @GetMapping("/bills/")

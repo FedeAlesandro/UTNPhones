@@ -1,12 +1,13 @@
 package edu.utn.utnPhones.models.dtos.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.enums.BillStatus;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,9 +24,11 @@ public class BillDtoResponse {
 
     private BigDecimal totalPrice;
 
-    private LocalDate date;
+    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date date;
 
-    private LocalDate dateExpiration;
+    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private Date dateExpiration;
 
     private BillStatus state;
 

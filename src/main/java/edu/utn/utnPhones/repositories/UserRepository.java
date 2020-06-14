@@ -33,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "select * from users u where u.dni = ?1 and u.id_user <> ?2 ;", nativeQuery = true)
     User findByDniAndId(String dni, Integer idUser);
 
-    Optional<User> findByUserNameAndPwd(String userName, String pwd);
+    Optional<User> findByUserNameAndPwdAndRemoved(String userName, String pwd, Boolean removed);
 }

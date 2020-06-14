@@ -1,6 +1,7 @@
 package edu.utn.utnPhones.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.utn.utnPhones.models.enums.BillStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -51,11 +52,13 @@ public class Bill {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "bill_date")
-    private LocalDate date;
+    private Date date;
 
+    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "bill_expiration")
-    private LocalDate dateExpiration;
+    private Date dateExpiration;
 
     @Enumerated(EnumType.STRING)
     private BillStatus state;

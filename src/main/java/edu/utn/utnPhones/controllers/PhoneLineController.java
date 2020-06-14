@@ -20,9 +20,9 @@ public class PhoneLineController {
         return phoneLineService.getAll();
     }
 
-    public PhoneLine getById(Integer id){
+    public List<PhoneLine> getByUserName(String userName){
 
-        return phoneLineService.getById(id);
+        return phoneLineService.getByUserName(userName);
     }
 
     public PhoneLine add(PhoneLineDtoAdd phoneLine){

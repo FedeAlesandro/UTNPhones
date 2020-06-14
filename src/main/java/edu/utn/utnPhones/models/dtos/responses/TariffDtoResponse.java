@@ -3,10 +3,8 @@ package edu.utn.utnPhones.models.dtos.responses;
 import edu.utn.utnPhones.models.Tariff;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @Builder
 public class TariffDtoResponse {
 

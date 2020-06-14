@@ -43,6 +43,7 @@ public class PhoneCallDtoResponse {
                 .totalCost(phoneCall.getTotalCost())
                 .originPhoneNumber(phoneCall.getOriginPhoneNumber())
                 .destinationPhoneNumber(phoneCall.getDestinationPhoneNumber())
+                .date(phoneCall.getDate())
                 .build();
     }
 }

@@ -34,7 +34,7 @@ public class UserDtoPatch {
     @Size(min = 8, max = 40, message = "Invalid size for password")
     private String pwd;
 
-    @Pattern(regexp = "[0-9a-zA-Z]+", message = "Cities should contain only letters or numbers")
+    @Pattern(regexp = "[0-9a-zA-Z ]+", message = "Cities should contain only letters or numbers")
     @Size(min = 4, max = 60, message = "Invalid size for city")
     private String city;
 
@@ -42,7 +42,7 @@ public class UserDtoPatch {
     @Size(min = 2, max = 4, message = "Invalid size for area code")
     private String areaCode;
 
-    @Pattern(regexp = "[a-zA-Z]+", message = "Provinces should contain only letters")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "Provinces should contain only letters")
     @Size(min = 4, max = 40, message = "Invalid size for province")
     private String province;
 }

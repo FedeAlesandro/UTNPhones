@@ -3,6 +3,7 @@ package edu.utn.utnPhones.controllers;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
+import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.dtos.responses.ErrorDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.NotValidFieldDtoResponse;
@@ -59,17 +60,26 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorDtoResponse> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                .errorCode(3)
-                .message(exception.getMessage())
-                .build());
+                        .errorCode(3)
+                        .message(exception.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorDtoResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                .errorCode(4)
-                .message(exception.getMessage())
-                .build());
+                        .errorCode(4)
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(UnauthorizedUserTypeException.class)
+    public ResponseEntity<ErrorDtoResponse> handleUnauthorizedUserTypeException(UnauthorizedUserTypeException exception){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
+                        .errorCode(5)
+                        .message(exception.getMessage())
+                        .build());
     }
 }
