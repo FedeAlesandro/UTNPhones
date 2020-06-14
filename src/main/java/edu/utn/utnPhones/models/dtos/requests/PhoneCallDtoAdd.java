@@ -1,4 +1,4 @@
-package edu.utn.utnPhones.models.dtos;
+package edu.utn.utnPhones.models.dtos.requests;
 
 import lombok.Data;
 

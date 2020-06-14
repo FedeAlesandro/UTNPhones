@@ -1,7 +1,9 @@
 package edu.utn.utnPhones.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import edu.utn.utnPhones.models.dtos.PhoneLineAdd;
+import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
+import edu.utn.utnPhones.models.enums.LineType;
+import edu.utn.utnPhones.models.enums.PhoneLineStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -67,7 +69,8 @@ public class PhoneLine {
     @OneToMany(mappedBy = "destinationPhoneLine")
     private List<PhoneCall> destinationPhoneCalls;
 
-    public static PhoneLine fromPhoneLineAdd(PhoneLineAdd phoneLine){
+    public static PhoneLine fromPhoneLineAdd(PhoneLineDtoAdd phoneLine){
+
         return PhoneLine.builder()
                 .user(phoneLine.getUser())
                 .phoneNumber(phoneLine.getPhoneNumber())

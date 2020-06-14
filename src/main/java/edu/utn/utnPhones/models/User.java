@@ -1,6 +1,9 @@
 package edu.utn.utnPhones.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
+import edu.utn.utnPhones.models.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -83,4 +86,35 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<PhoneLine> phoneLines;
+
+    public static User fromUserDtoAdd(UserDtoAdd userDtoAdd, City city){
+
+        return User.builder()
+                .name(userDtoAdd.getName())
+                .lastName(userDtoAdd.getLastName())
+                .dni(userDtoAdd.getDni())
+                .userName(userDtoAdd.getUserName())
+                .pwd(userDtoAdd.getPwd())
+                .userType(userDtoAdd.getUserType())
+                .city(city)
+                .removed(false)
+                .phoneLines(null)
+                .build();
+    }
+
+    public static User fromUserDtoPut(UserDtoPut userDtoPut, User oldUser, City city){
+
+        return User.builder()
+                .id(oldUser.getId())
+                .city(city)
+                .name(userDtoPut.getName())
+                .lastName(userDtoPut.getLastName())
+                .dni(userDtoPut.getDni())
+                .userName(userDtoPut.getUserName())
+                .pwd(userDtoPut.getPwd())
+                .removed(oldUser.getRemoved())
+                .userType(oldUser.getUserType())
+                .phoneLines(oldUser.getPhoneLines())
+                .build();
+    }
 }

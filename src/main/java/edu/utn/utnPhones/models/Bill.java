@@ -1,6 +1,7 @@
 package edu.utn.utnPhones.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import edu.utn.utnPhones.models.enums.BillStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

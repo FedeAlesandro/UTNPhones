@@ -3,11 +3,11 @@ package edu.utn.utnPhones.models.dtos.responses;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class NotValidResponse {
+public class NotValidFieldDtoResponse {
 
-    private List<NotValidFieldResponse> errors;
+    private String field;
+
+    private String message;
 }

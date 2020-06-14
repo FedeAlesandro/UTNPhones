@@ -13,7 +13,7 @@ public interface CallsByDateRange {
 
     Integer getDuration();
 
-    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Date getDate();
 
     String getOriginNumber();

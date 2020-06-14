@@ -1,7 +1,6 @@
-package edu.utn.utnPhones.models.dtos;
+package edu.utn.utnPhones.models.dtos.requests;
 
-import edu.utn.utnPhones.models.City;
-import edu.utn.utnPhones.models.UserType;
+import edu.utn.utnPhones.models.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +41,7 @@ public class UserDtoAdd {
 
     @NotBlank(message = "Password should not be empty")
     @Pattern(regexp = "[0-9a-zA-Z]+", message = "Password should contain numbers, upper and lower case letters only")
-    @Size(min = 4, max = 40, message = "Invalid size for password")
+    @Size(min = 8, max = 40, message = "Invalid size for password")
     private String pwd;
 
     @NotNull
