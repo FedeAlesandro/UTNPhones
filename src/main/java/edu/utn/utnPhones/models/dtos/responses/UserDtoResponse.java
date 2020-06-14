@@ -1,5 +1,6 @@
 package edu.utn.utnPhones.models.dtos.responses;
 
+import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.CityDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +24,16 @@ public class UserDtoResponse {
     private String userName;
 
     private CityDto city;
+
+    public static UserDtoResponse fromUser(User user){
+
+        return UserDtoResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .dni(user.getDni())
+                .userName(user.getUserName())
+                .city(CityDto.fromCity(user.getCity()))
+                .build();
+    }
 }

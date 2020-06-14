@@ -3,10 +3,11 @@ package edu.utn.utnPhones.controllers;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
+import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
-import edu.utn.utnPhones.models.dtos.responses.ErrorResponseDto;
-import edu.utn.utnPhones.models.dtos.responses.NotValidFieldResponse;
-import edu.utn.utnPhones.models.dtos.responses.NotValidResponse;
+import edu.utn.utnPhones.models.dtos.responses.ErrorDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.NotValidFieldDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.NotValidDtoResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,59 +22,64 @@ import java.util.stream.Collectors;
 public class ExceptionHandlerController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<NotValidResponse> handleNotValidException(MethodArgumentNotValidException exception){
+    public ResponseEntity<NotValidDtoResponse> handleNotValidException(MethodArgumentNotValidException exception){
 
         List<FieldError> errors = exception.getBindingResult().getFieldErrors();
-        List<NotValidFieldResponse> responses = errors
-                .stream()
-                .map(e -> NotValidFieldResponse.builder()
+
+        List<NotValidFieldDtoResponse> responses = errors.stream()
+                .map(e -> NotValidFieldDtoResponse.builder()
                         .field(e.getField())
                         .message(e.getDefaultMessage())
                         .build())
                 .collect(Collectors.toList());
 
-        return ResponseEntity
-                .badRequest()
-                .body(NotValidResponse.builder()
+        return ResponseEntity.badRequest().body(NotValidDtoResponse.builder()
                         .errors(responses)
                         .build());
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException exception){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponseDto.builder()
+    public ResponseEntity<ErrorDtoResponse> handleNotFoundException(NotFoundException exception){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorDtoResponse.builder()
                         .message(exception.getMessage())
                         .errorCode(1)
                         .build());
     }
 
     @ExceptionHandler(PhoneLineRemovedException.class)
-    public ResponseEntity<ErrorResponseDto> PhoneLineRemovedException(PhoneLineRemovedException exception){
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponseDto.builder()
+    public ResponseEntity<ErrorDtoResponse> handlePhoneLineRemovedException(PhoneLineRemovedException exception){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
                         .message(exception.getMessage())
                         .errorCode(2)
                         .build());
     }
 
     @ExceptionHandler(DuplicatedUsernameException.class)
-    public ResponseEntity<ErrorResponseDto> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
+    public ResponseEntity<ErrorDtoResponse> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
-                .errorCode(3)
-                .message(exception.getMessage())
-                .build());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
+                        .errorCode(3)
+                        .message(exception.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
+    public ResponseEntity<ErrorDtoResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
-                .errorCode(4)
-                .message(exception.getMessage())
-                .build());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
+                        .errorCode(4)
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(UnauthorizedUserTypeException.class)
+    public ResponseEntity<ErrorDtoResponse> handleUnauthorizedUserTypeException(UnauthorizedUserTypeException exception){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
+                        .errorCode(5)
+                        .message(exception.getMessage())
+                        .build());
     }
 }

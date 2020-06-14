@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -86,5 +87,14 @@ public class PhoneCall {
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     @Column(name = "date_call")
     private Date date;
+
+    public static PhoneCall fromDto(PhoneCallDtoAdd phoneCallDtoAdd){
+
+        return PhoneCall.builder()
+                .duration(phoneCallDtoAdd.getDuration())
+                .originPhoneNumber(phoneCallDtoAdd.getOriginPhoneNumber())
+                .destinationPhoneNumber(phoneCallDtoAdd.getDestinationPhoneNumber())
+                .build();
+    }
 
 }

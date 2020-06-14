@@ -1,27 +1,22 @@
 package edu.utn.utnPhones.controllers;
 
 import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.dtos.UserDtoAdd;
-import edu.utn.utnPhones.models.dtos.UserDtoPatch;
-import edu.utn.utnPhones.models.dtos.UserDtoPut;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    //Listar clientes no eliminados
     public List<ClientsWithoutPassword> getClients(){
 
         return userService.getClients();

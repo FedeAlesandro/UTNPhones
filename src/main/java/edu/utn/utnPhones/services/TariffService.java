@@ -3,7 +3,7 @@ package edu.utn.utnPhones.services;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.repositories.TariffRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,14 +11,10 @@ import java.util.List;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_TARIFF;
 
 @Service
+@RequiredArgsConstructor
 public class TariffService {
 
     private final TariffRepository tariffRepository;
-
-    @Autowired
-    public TariffService (TariffRepository tariffRepository){
-        this.tariffRepository = tariffRepository;
-    }
 
     public List<Tariff> getAll() {
 

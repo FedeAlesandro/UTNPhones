@@ -2,17 +2,17 @@ package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
-import edu.utn.utnPhones.models.PhoneLineStatus;
-import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.dtos.PhoneLineAdd;
-import edu.utn.utnPhones.models.dtos.PhoneLineUpdate;
+import edu.utn.utnPhones.models.enums.PhoneLineStatus;
+import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
 import edu.utn.utnPhones.repositories.PhoneLineRepository;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_NOT_REMOVED;
@@ -20,47 +20,42 @@ import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_REMOVED;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
 @Service
+@RequiredArgsConstructor
 public class PhoneLineService {
 
     private final PhoneLineRepository phoneLineRepository;
+
     private final UserRepository userRepository;
 
-    @Autowired
-    public PhoneLineService(PhoneLineRepository phoneLineRepository, UserRepository userRepository) {
-        this.phoneLineRepository = phoneLineRepository;
-        this.userRepository = userRepository;
-    }
-
     public List<PhoneLine> getAll(){
+
        return phoneLineRepository.getAll();
     }
 
-    public List<PhoneLine> getAllWithoutFilter(){
-        return phoneLineRepository.findAll();
+    public List<PhoneLine> getByUserName(String userName) {
+
+        List<PhoneLine> phoneLines = phoneLineRepository.findByUserName(userName, false);
+
+        return phoneLines.stream()
+                .filter(phoneLine -> !phoneLine.getState().equals(PhoneLineStatus.removed))
+                .collect(Collectors.toList());
     }
 
-    public PhoneLine getById(Integer id) {
-        PhoneLine phoneLine = phoneLineRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
+    public PhoneLine add (PhoneLineDtoAdd phoneLineAdd){
 
-        if(phoneLine.getState().equals(PhoneLineStatus.removed))
-            throw new PhoneLineRemovedException(PHONE_LINE_REMOVED);
-
-        return phoneLine;
-    }
-
-    public PhoneLine add (PhoneLineAdd phoneLineAdd){
-
-        User user = userRepository.findById(phoneLineAdd.getUser().getId())
+        userRepository.findById(phoneLineAdd.getUser().getId())
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         PhoneLine oldPhoneLine = phoneLineRepository.findByPhoneNumber(phoneLineAdd.getPhoneNumber());
         PhoneLine phoneLine = PhoneLine.fromPhoneLineAdd(phoneLineAdd);
 
-        if(oldPhoneLine != null){
+        if (oldPhoneLine != null){
+
             if(oldPhoneLine.getState().equals(PhoneLineStatus.removed)){
+
                 oldPhoneLine.setUser(phoneLineAdd.getUser());
                 oldPhoneLine.setState(PhoneLineStatus.register);
+
                 return phoneLineRepository.save(oldPhoneLine);
             }else
                 throw new PhoneLineRemovedException(PHONE_LINE_NOT_REMOVED);
@@ -69,11 +64,12 @@ public class PhoneLineService {
         return phoneLineRepository.save(phoneLine);
     }
 
-    public PhoneLine update (Integer id, PhoneLineUpdate phoneLineUpdate){
+    public PhoneLine update (Integer id, PhoneLineDtoUpdate phoneLineUpdate){
+
         PhoneLine phoneLine = phoneLineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
 
-        if(phoneLine.getState().equals(PhoneLineStatus.removed))
+        if (phoneLine.getState().equals(PhoneLineStatus.removed))
             throw new PhoneLineRemovedException(PHONE_LINE_REMOVED);
 
         userRepository.findById(phoneLineUpdate.getUser().getId())
@@ -88,10 +84,10 @@ public class PhoneLineService {
     }
 
     public void remove (Integer id){
+
         phoneLineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
 
         phoneLineRepository.remove(id);
     }
-
 }

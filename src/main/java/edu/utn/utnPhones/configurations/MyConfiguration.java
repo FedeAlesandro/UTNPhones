@@ -1,4 +1,4 @@
-package edu.utn.utnPhones.configuration;
+package edu.utn.utnPhones.configurations;
 
 import edu.utn.utnPhones.session.EmployeeSessionFilter;
 import edu.utn.utnPhones.session.InfrastructureSessionFilter;
