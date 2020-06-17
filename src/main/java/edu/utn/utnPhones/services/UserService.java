@@ -15,6 +15,7 @@ import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.utils.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import static edu.utn.utnPhones.utils.Constants.DUPLICATED_USERNAME;
 import static edu.utn.utnPhones.utils.Constants.LOCATION_NOT_EXIST;
 import static edu.utn.utnPhones.utils.Constants.NOT_ADDED_USER;
 import static edu.utn.utnPhones.utils.Constants.NOT_UPDATED_USER;
+import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST_ID;
 import static edu.utn.utnPhones.utils.Constants.UNAUTHORIZED_USER_HANDLING;
 import static edu.utn.utnPhones.utils.Constants.LOGIN_FAILED;
@@ -35,6 +37,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final CityRepository cityRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public User getClient(String userName) {
 
@@ -58,6 +62,8 @@ public class UserService {
         userNameVerification(newUser.getUserName(),null);
 
         dniSearch(user.getDni()).ifPresent(newUser::setId);
+
+        newUser.setPwd(passwordEncoder.encode(newUser.getPwd()));
 
         newUser = userRepository.save(newUser);
         newUser.setId(userRepository.getIdByUserName(newUser.getUserName(), false));
@@ -88,6 +94,8 @@ public class UserService {
 
         City city = cityVerification(updatedUser.getCity(), updatedUser.getAreaCode(), updatedUser.getProvince());
 
+        updatedUser.setPwd(passwordEncoder.encode(updatedUser.getPwd()));
+
         return userRepository.save(User.fromUserDtoPut(updatedUser, oldUser, city));
     }
 
@@ -114,7 +122,7 @@ public class UserService {
         Optional.ofNullable(updatedUser.getLastName()).ifPresent(oldUser::setLastName);
         Optional.ofNullable(updatedUser.getDni()).ifPresent(oldUser::setDni);
         Optional.ofNullable(updatedUser.getUserName()).ifPresent(oldUser::setUserName);
-        Optional.ofNullable(updatedUser.getPwd()).ifPresent(oldUser::setPwd);
+        Optional.ofNullable(updatedUser.getPwd()).ifPresent(pwd -> oldUser.setPwd(passwordEncoder.encode(pwd)));
         Optional.ofNullable(city).ifPresent(oldUser::setCity);
 
         return userRepository.save(oldUser);
@@ -122,8 +130,13 @@ public class UserService {
 
     public User login(String username, String pwd){
 
-        return userRepository.findByUserNameAndPwdAndRemoved(username, pwd, false)
-                .orElseThrow(() -> new NotFoundException(LOGIN_FAILED));
+        User user = userRepository.findByUserNameAndRemoved(username,false)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+
+        if(passwordEncoder.matches(pwd, user.getPwd()))
+            return user;
+        else
+            throw new NotFoundException(LOGIN_FAILED);
     }
 
     private City cityVerification(String city, String areaCode, String province){
@@ -135,15 +148,11 @@ public class UserService {
     private void userNameVerification(String userName, Integer idUser){
 
         if (idUser == null) {
-
-            if (userRepository.findByUserNameAndRemoved(userName, false) != null) {
+            if (userRepository.findByUserNameAndRemoved(userName, false).isPresent())
                 throw new DuplicatedUsernameException(DUPLICATED_USERNAME);
-            }
-        } else {
-
-            if (userRepository.findByIdAndUserNameAndRemoved(userName, false, idUser) != null) {
+        }else {
+            if (userRepository.findByIdAndUserNameAndRemoved(userName, false, idUser).isPresent())
                 throw new DuplicatedUsernameException(DUPLICATED_USERNAME);
-            }
         }
     }
 
@@ -179,7 +188,7 @@ public class UserService {
 
     private void dniVerification(String dni, Integer idUser){
 
-        if (userRepository.findByDniAndId(dni, idUser) != null) {
+        if (userRepository.findByDniAndId(dni, idUser).isPresent()) {
             throw new UserAlreadyExistsException(NOT_UPDATED_USER);
         }
     }

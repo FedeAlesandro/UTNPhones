@@ -69,10 +69,7 @@ public class User {
     @Size(min = 8, max = 40, message = "Invalid size for username")
     @Column(name = "user_name")
     private String userName;
-
-    @NotBlank(message = "Password is required")
-    @Pattern(regexp = "[0-9a-zA-Z]+", message = "Password should contain numbers, upper and lower case letters only")
-    @Size(min = 4, max = 40, message = "Invalid size for password")
+    
     @Column(name = "pwd")
     private String pwd;
 
