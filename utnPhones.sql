@@ -1,7 +1,7 @@
 create database utn_phones;
-use utn_phones;
+use utn_phones; 
+SET GLOBAL event_scheduler = ON;
 #drop database utn_phones;
-SET GLOBAL time_zone = '-3:00';
 
 create table provinces(
 	id_province int auto_increment,
@@ -24,8 +24,8 @@ create table users(
     dni varchar(10),
     user_name varchar(40) unique,
     pwd varchar(40),
-    user_type enum('employee', 'client'),
-	removed_user boolean, -- baja logica
+    user_type enum('employee', 'client', 'infrastructure'),
+	removed_user boolean default false, -- baja logica
     constraint pk_id_user primary key (id_user),
     constraint fk_users_city foreign key (id_city) references cities (id_city)
 );
@@ -34,7 +34,7 @@ create table phone_lines(
     id_user int,
     phone_number varchar(32) unique, #siempre se guardan con el area code
     line_type enum('mobile', 'home'), 
-	state enum('register', 'suspended', 'removed'),
+	state enum('register', 'suspended', 'removed') default 'register',
     constraint pk_id_phone_line primary key (id_phone_line),
     constraint fk_phone_lines_user foreign key (id_user) references Users (id_user)
 );
@@ -60,7 +60,7 @@ create table bills(
 	constraint pk_id_bill primary key (id_bill),
     constraint fk_bills_phone_line foreign key (id_phone_line) references phone_lines (id_phone_line)
 );	
- create table phone_calls(
+create table phone_calls(
 	id_phone_call int auto_increment,
 	id_tariff int,
     id_bill int,
@@ -79,75 +79,53 @@ create table bills(
 	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line ) references phone_lines(id_phone_line)
 );
 
-select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
-from bills as b
-join phone_lines as pl
-on b.id_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1 AND b.bill_date BETWEEN  "2020-04-02" AND "2020-05-03";
-
-select u.user_name userName, pc.total_price totalPrice, pc.duration duration, pc.date_call date
-from phone_calls as pc
-join phone_lines as pl
-on pc.id_origin_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1 AND pc.date_call BETWEEN "2020-04-02" AND "2020-05-03";
-
-select u.user_name userName, pc.total_cost totalCost, pc.total_price totalPrice, pc.duration duration, pc.date_call date
-from phone_calls as pc
-join phone_lines as pl
-on pc.id_origin_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1;
-
 Delimiter //
 create trigger tbi_phone_calls before insert on phone_calls for each row
 begin
 	set new.date_call = now();
 end //
-// drop trigger tbi_phone_calls;
+ 
+delimiter //
+create procedure spGenerateBills ()
+begin
+	declare done int default 0;
+    declare v_id_phone_line int;
+	declare cur_phone_lines cursor for select id_phone_line from phone_lines;
+    declare continue handler for not found set done = 1;
+    
+	start transaction;
+    
+    open cur_phone_lines;
+    get_id : loop
+		fetch cur_phone_lines into v_id_phone_line;
+        if done = 1 then
+			leave get_id;
+		end if;
+	
+		insert into bills(id_phone_line, calls_amount, total_cost, total_price, bill_date, bill_expiration, state)
+		select v_id_phone_line, COUNT(pc.id_phone_call) as calls_amount, SUM(pc.total_cost) as total_cost, SUM(pc.total_price) as total_price,
+			CURDATE() as bill_date, DATE_ADD(CURDATE(), INTERVAL 15 DAY) as bill_expiration, 'sent' as state
+		from phone_lines as pl
+		join phone_calls as pc
+		on pl.id_phone_line = pc.id_origin_phone_line
+		where pl.id_phone_line = v_id_phone_line and pc.id_bill = null;
+		
+        update phone_calls set id_bill = last_insert_id() where id_origin_phone_line = v_id_phone_line and id_bill = null;
+	end loop;
+    
+    close cur_phone_lines;
+    
+    commit;
+    
+end //
 
-select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
-from bills as b
-join phone_lines as pl
-on b.id_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1 AND b.bill_date BETWEEN  "2020-04-02" AND "2020-05-03";
-
-select u.user_name userName, pc.total_price totalPrice, pc.duration duration, pc.date_call date
-from phone_calls as pc
-join phone_lines as pl
-on pc.id_origin_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1 AND pc.date_call BETWEEN "2020-04-02" AND "2020-05-03";
-
-select u.user_name userName, pc.total_cost totalCost, pc.total_price totalPrice, pc.duration duration, pc.date_call date
-from phone_calls as pc
-join phone_lines as pl
-on pc.id_origin_phone_line=pl.id_phone_line
-join users as u
-on pl.id_user = u.id_user
-where u.id_user = 1;
-
-select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration
-            from bills as b
-            join phone_lines as pl
-            on b.id_phone_line=pl.id_phone_line
-            join users as u
-            on pl.id_user = u.id_user
-			where u.id_user = 1 ;
-            
-select * from bills;
-
-select * from phone_lines;
-
-select * from phone_calls;
-
-select * 
-from phone_calls
-where duration between 1 and 12;
+delimiter //
+create event if not exists event_bills
+on schedule every 1 month 
+starts '2020-07-01 00:00:00'
+do
+begin
+	call spGenerateBills();
+end//
+ 
+-- select date_format(date_add(subdate(now(), dayofmonth(now()) - 1), interval 1 month), "%Y - %m - %d 00:00:00")
