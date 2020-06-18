@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class InfrastructureController {
 
     private final PhoneCallController phoneCallController;
 
-    @PostMapping("/")
-    public ResponseEntity<PhoneCallDtoResponse> addPhoneCall(@RequestBody @Valid PhoneCallDtoAdd phoneCall){
+    @PostMapping
+    public ResponseEntity<PhoneCallDtoResponse> addPhoneCall(@RequestBody @Valid PhoneCallDtoAdd phoneCall) {
 
         PhoneCall addedCall = phoneCallController.add(phoneCall);
 

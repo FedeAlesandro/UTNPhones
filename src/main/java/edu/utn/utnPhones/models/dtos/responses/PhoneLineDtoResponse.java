@@ -1,7 +1,7 @@
 package edu.utn.utnPhones.models.dtos.responses;
 
-import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.PhoneLine;
+import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
 import lombok.Builder;
 import lombok.Data;

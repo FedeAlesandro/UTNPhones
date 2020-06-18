@@ -1,6 +1,8 @@
 create database utn_phones;
 use utn_phones; 
+SET GLOBAL time_zone = '-03:00';
 SET GLOBAL event_scheduler = ON;
+SET AUTOCOMMIT=0;
 #drop database utn_phones;
 
 create table provinces(
@@ -56,7 +58,7 @@ create table bills(
     total_price decimal,
     bill_date date,
     bill_expiration date,
-    state enum('payed', 'expired'), #paga o vencida, puse state porque status es reservada
+    state enum('sent', 'payed', 'expired'), #paga o vencida, puse state porque status es reservada
 	constraint pk_id_bill primary key (id_bill),
     constraint fk_bills_phone_line foreign key (id_phone_line) references phone_lines (id_phone_line)
 );	
@@ -79,14 +81,75 @@ create table phone_calls(
 	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line ) references phone_lines(id_phone_line)
 );
 
-Delimiter //
+delimiter //
+create procedure sp_find_city_by_phone_number (origin_phone_number varchar(32), destination_phone_number varchar(32), out origin_id_city int, out destination_id_city int)
+begin
+
+	set origin_id_city = (select distinct c.id_city
+		from cities as c
+        join users as u
+        on u.id_city = c.id_city
+        join phone_lines as pl
+        on pl.id_user = u.id_user
+        join phone_calls as pc
+        on pc.id_origin_phone_line = pl.id_phone_line
+        where pc.origin_phone_number like CONCAT(c.area_code,'%') and pc.origin_phone_number = origin_phone_number);
+    
+    set destination_id_city = (select distinct c.id_city
+		from cities as c
+        join users as u
+        on u.id_city = c.id_city
+        join phone_lines as pl
+        on pl.id_user = u.id_user
+        join phone_calls as pc
+        on pc.id_destination_phone_line = pl.id_phone_line
+        where pc.destination_phone_number like CONCAT(c.area_code,'%') and pc.destination_phone_number = destination_phone_number);
+end //
+
+delimiter //
+create procedure sp_generate_values_calls (origin_phone_number varchar(32), destination_phone_number varchar(32), duration int, out id_origin_phone_line int, 
+											out id_destination_phone_line int, out total_cost decimal, out total_price decimal, out id_tariff int)
+begin
+
+    call sp_find_city_by_phone_number (origin_phone_number, destination_phone_number, @origin_id_city, @destination_id_city);
+
+	if exists(select pl.id_phone_line from phone_lines as pl where pl.phone_number = origin_phone_number and state = 'register') then
+        set id_origin_phone_line = (select pl.id_phone_line from phone_lines as pl where pl.phone_number = origin_phone_number);
+	else
+		signal sqlstate "45000" set message_text = "The number entered doesn't exist", mysql_errno = 1001;
+	end if;
+
+    if exists(select pl.id_phone_line from phone_lines as pl where pl.phone_number = destination_phone_number and state = 'register') then
+		set id_destination_phone_line = (select pl.id_phone_line from phone_lines as pl where pl.phone_number = destination_phone_number);
+	else
+		signal sqlstate "45000" set message_text = "The number entered doesn't exist", mysql_errno = 1001;
+	end if;
+    
+    select t.cost_per_minute * duration, t.price_per_minute * duration, t.id_tariff
+    into total_cost, total_price, id_tariff
+    from tariffs as t
+    where t.id_origin_city = @origin_id_city and t.id_destination_city = @destination_id_city;
+    
+end //
+
+delimiter //
 create trigger tbi_phone_calls before insert on phone_calls for each row
 begin
+	    
+	call sp_generate_values_calls(new.origin_phone_number, new.destination_phone_number, new.duration,
+				@id_origin_phone_line, @id_destination_phone_line, @total_cost, @total_price, @id_tariff);
+                
 	set new.date_call = now();
+    set new.id_origin_phone_line = @id_origin_phone_line;
+	set new.id_destination_phone_line = @id_destination_phone_line;
+	set new.total_cost = @total_cost;
+    set new.total_price = @total_price;
+    set new.id_tariff = @id_tariff;
+    
 end //
- 
+
 delimiter //
-create procedure spGenerateBills ()
+create procedure sp_generate_bills ()
 begin
 	declare done int default 0;
     declare v_id_phone_line int;
@@ -103,15 +166,42 @@ begin
 		end if;
 	
 		insert into bills(id_phone_line, calls_amount, total_cost, total_price, bill_date, bill_expiration, state)
-		select v_id_phone_line, COUNT(pc.id_phone_call) as calls_amount, SUM(pc.total_cost) as total_cost, SUM(pc.total_price) as total_price,
+		select v_id_phone_line, COUNT(pc.id_phone_call) as calls_amount, ifnull(SUM(pc.total_cost), 0) as total_cost, ifnull(SUM(pc.total_price),0)  as total_price,
 			CURDATE() as bill_date, DATE_ADD(CURDATE(), INTERVAL 15 DAY) as bill_expiration, 'sent' as state
 		from phone_lines as pl
 		join phone_calls as pc
 		on pl.id_phone_line = pc.id_origin_phone_line
-		where pl.id_phone_line = v_id_phone_line and pc.id_bill = null;
+		where pl.id_phone_line = v_id_phone_line and pc.id_bill is null;
 		
-        update phone_calls set id_bill = last_insert_id() where id_origin_phone_line = v_id_phone_line and id_bill = null;
+        update phone_calls set id_bill = last_insert_id() where id_origin_phone_line = v_id_phone_line and id_bill is null;
 	end loop;
+    
+    close cur_phone_lines;
+    
+    commit;
+    
+end //
+
+delimiter //
+create procedure sp_generate_expired_bills ()
+begin
+	declare done int default 0;
+    declare v_id_phone_line int;
+	declare cur_phone_lines cursor for select id_phone_line from phone_lines;
+    declare continue handler for not found set done = 1;
+    
+	start transaction;
+    
+    open cur_phone_lines;
+    get_id : loop
+		fetch cur_phone_lines into v_id_phone_line;
+        if done = 1 then
+			leave get_id;
+		end if;
+	
+        update bills set state = 'expired' where id_phone_line = v_id_phone_line and state = 'sent';
+	
+    end loop;
     
     close cur_phone_lines;
     
@@ -125,7 +215,16 @@ on schedule every 1 month
 starts '2020-07-01 00:00:00'
 do
 begin
-	call spGenerateBills();
+	call sp_generate_bills();
 end//
- 
--- select date_format(date_add(subdate(now(), dayofmonth(now()) - 1), interval 1 month), "%Y - %m - %d 00:00:00")
+
+delimiter //
+create event if not exists event_expired_bills
+on schedule every 1 month 
+starts '2020-07-15 00:00:00'
+do
+begin
+	call sp_generate_expired_bills();
+end//
+
+        

@@ -1,7 +1,7 @@
 package edu.utn.utnPhones.models.dtos.requests;
 
-import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.User;
+import edu.utn.utnPhones.models.enums.LineType;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -26,7 +26,7 @@ public class LoginController {
 
     private final SessionManager sessionManager;
 
-    @PostMapping("login/")
+    @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody @Valid LoginDto loginRequestDto){
 
         User user = userController.login(loginRequestDto.getUsername(), loginRequestDto.getPwd());
@@ -35,7 +35,7 @@ public class LoginController {
         return ResponseEntity.ok().headers(createHeaders(token)).build();
     }
 
-    @PostMapping("logout/")
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
 
         Session session = null;

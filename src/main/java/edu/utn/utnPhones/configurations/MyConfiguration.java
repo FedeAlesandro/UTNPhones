@@ -34,7 +34,7 @@ public class MyConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("edu.utn.utnPhones"))
                 .paths(PathSelectors.any())
                 .build();
     }

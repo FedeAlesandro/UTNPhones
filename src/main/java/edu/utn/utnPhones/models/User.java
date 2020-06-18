@@ -21,10 +21,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -40,44 +36,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_city", referencedColumnName = "id_city")
     @JsonBackReference(value = "userCity")
     private City city;
 
-    @NotBlank(message = "Name is required")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Name should contain only letters")
-    @Size(min = 2, max = 40, message = "Invalid size for name")
     @Column(name = "name")
     private String name;
 
-    @NotBlank(message = "Last name is required")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Last name should contain only letters")
-    @Size(min = 2, max = 40, message = "Invalid size for last name")
     @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank(message = "DNI is required")
-    @Pattern(regexp = "[0-9]+", message = "DNI should be made up of numbers")
-    @Size(min = 7, max = 8, message = "Invalid size for DNI")
     @Column(name = "dni")
     private String dni;
 
-    @NotBlank(message = "Username is required")
-    @Pattern(regexp = "[0-9a-zA-Z\\.\\-\\_]+", message = "Invalid username, choose another one")
-    @Size(min = 8, max = 40, message = "Invalid size for username")
     @Column(name = "user_name")
     private String userName;
     
     @Column(name = "pwd")
     private String pwd;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @NotNull
     @Column(name = "removed_user")
     private Boolean removed;
 
