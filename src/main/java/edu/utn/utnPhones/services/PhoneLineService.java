@@ -10,7 +10,9 @@ import edu.utn.utnPhones.repositories.PhoneLineRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +43,7 @@ public class PhoneLineService {
                 .collect(Collectors.toList());
     }
 
-    public PhoneLine add (PhoneLineDtoAdd phoneLineAdd){
+    public URI add (PhoneLineDtoAdd phoneLineAdd){
 
         userRepository.findById(phoneLineAdd.getUser().getId())
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
@@ -56,12 +58,20 @@ public class PhoneLineService {
                 oldPhoneLine.setUser(phoneLineAdd.getUser());
                 oldPhoneLine.setState(PhoneLineStatus.register);
 
-                return phoneLineRepository.save(oldPhoneLine);
+                return getLocation(phoneLineRepository.save(oldPhoneLine));
             }else
                 throw new PhoneLineRemovedException(PHONE_LINE_NOT_REMOVED);
         }
 
-        return phoneLineRepository.save(phoneLine);
+        return getLocation(phoneLineRepository.save(phoneLine));
+    }
+
+    private URI getLocation(PhoneLine phoneLine) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{idPhoneLine}")
+                .buildAndExpand(phoneLine.getId())
+                .toUri();
     }
 
     public PhoneLine update (Integer id, PhoneLineDtoUpdate phoneLineUpdate){

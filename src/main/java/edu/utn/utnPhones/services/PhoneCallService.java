@@ -10,7 +10,9 @@ import edu.utn.utnPhones.repositories.PhoneCallRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class PhoneCallService {
 
     private final UserRepository userRepository;
 
-    public PhoneCall add(PhoneCallDtoAdd phoneCall) {
+    public URI add(PhoneCallDtoAdd phoneCall) {
 
         PhoneCall phoneCallToAdd = PhoneCall.fromDto(phoneCall);
 
@@ -32,7 +34,15 @@ public class PhoneCallService {
 
         phoneCallToAdd.setDate(phoneCallRepository.getDateById(phoneCallToAdd.getId()));
 
-        return phoneCallToAdd;
+        return getLocation(phoneCallToAdd);
+    }
+
+    private URI getLocation(PhoneCall phoneCall) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{idPhoneCall}")
+                .buildAndExpand(phoneCall.getId())
+                .toUri();
     }
 
     public List<CallsByDateRange> getCallsByDateRange(Integer idUser, Date date1, Date date2) {

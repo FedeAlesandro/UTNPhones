@@ -2,6 +2,7 @@ package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.models.Bill;
+import edu.utn.utnPhones.models.enums.BillStatus;
 import edu.utn.utnPhones.models.projections.BillsForUsers;
 import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.repositories.BillRepository;
@@ -37,5 +38,18 @@ public class BillService {
 
         return billRepository.findById(idBill)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BILL));
+    }
+
+    public Bill payBill(Integer idBill) {
+
+        Bill bill = billRepository.findById(idBill)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_BILL));
+
+        if (bill.getState() == BillStatus.payed)
+            throw new NotFoundException(NOT_FOUND_BILL);
+
+        bill.setState(BillStatus.payed);
+
+        return billRepository.save(bill);
     }
 }
