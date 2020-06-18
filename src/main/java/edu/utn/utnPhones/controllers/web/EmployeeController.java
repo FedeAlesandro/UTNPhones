@@ -8,15 +8,15 @@ import edu.utn.utnPhones.controllers.UserController;
 import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.dtos.responses.BillDtoResponse;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
-import edu.utn.utnPhones.models.dtos.responses.PhoneCallDtoResponse;
-import edu.utn.utnPhones.models.dtos.responses.PhoneLineDtoResponse;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
-import edu.utn.utnPhones.models.dtos.responses.TariffDtoResponse;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
+import edu.utn.utnPhones.models.dtos.responses.BillDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.PhoneCallDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.PhoneLineDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.TariffDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.UserDtoResponse;
 import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.models.projections.CallsByUser;
@@ -54,7 +54,7 @@ public class EmployeeController {
 
     private final TariffController tariffController;
 
-    @GetMapping("/clients/")
+    @GetMapping("/clients")
     public ResponseEntity<?> getClients(@RequestParam(value = "userName", required = false) String userName){
 
         if (userName == null){
@@ -69,7 +69,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(user));
     }
 
-    @PostMapping("/clients/")
+    @PostMapping("/clients")
     public ResponseEntity<UserDtoResponse> addUser(@RequestBody @Valid UserDtoAdd user){
 
         User addedUser = userController.add(user);
@@ -77,7 +77,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(addedUser));
     }
 
-    @DeleteMapping("/clients/{idUser}/")
+    @DeleteMapping("/clients/{idUser}")
     public ResponseEntity<Void> removeUser(@PathVariable(value = "idUser") Integer idUser){
 
         userController.remove(idUser);
@@ -85,7 +85,7 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/clients/{idUser}/")
+    @PutMapping("/clients/{idUser}")
     public ResponseEntity<UserDtoResponse> updateUser(@PathVariable(value = "idUser") Integer idUser, @RequestBody @Valid UserDtoPut user){
 
         User updatedUser = userController.update(idUser, user);
@@ -93,7 +93,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(updatedUser));
     }
 
-    @PatchMapping("/clients/{idUser}/")
+    @PatchMapping("/clients/{idUser}")
     public ResponseEntity<UserDtoResponse> partialUpdateUser(@PathVariable(value = "idUser") Integer idUser, @RequestBody @Valid UserDtoPatch user){
 
         User updatedUser = userController.partialUpdate(idUser, user);
@@ -101,7 +101,7 @@ public class EmployeeController {
         return ResponseEntity.ok(UserDtoResponse.fromUser(updatedUser));
     }
 
-    @GetMapping("/users/{idUser}/calls/")
+    @GetMapping("/users/{idUser}/calls")
     public ResponseEntity<List<CallsByUser>> getCallsByUser(@PathVariable(value = "idUser") Integer idUser){
 
         List<CallsByUser> callsList = phoneCallController.getByUser(idUser);
@@ -109,19 +109,19 @@ public class EmployeeController {
         return callsList.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(callsList) : ResponseEntity.ok(callsList);
     }
 
-    @PostMapping("/phone-lines/")
+    @PostMapping("/phone-lines")
     public ResponseEntity<PhoneLineDtoResponse> addPhoneLine(@RequestBody @Valid PhoneLineDtoAdd phoneLine){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(PhoneLineDtoResponse.fromPhoneLine(phoneLineController.add(phoneLine)));
     }
 
-    @PutMapping("/phone-lines/{id}/")
+    @PutMapping("/phone-lines/{id}")
     public ResponseEntity<PhoneLineDtoResponse> updatePhoneLine(@PathVariable(value = "id") Integer id, @RequestBody @Valid PhoneLineDtoUpdate phoneLineUpdate){
 
         return ResponseEntity.ok(PhoneLineDtoResponse.fromPhoneLine(phoneLineController.update(id, phoneLineUpdate)));
     }
 
-    @DeleteMapping("/phone-lines/{id}/")
+    @DeleteMapping("/phone-lines/{id}")
     public ResponseEntity<Void> removePhoneLine(@PathVariable(value = "id") Integer id){
 
         phoneLineController.remove(id);
@@ -129,7 +129,7 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/phone-lines/")
+    @GetMapping("/phone-lines")
     public ResponseEntity<List<PhoneLineDtoResponse>> getPhoneLines(@RequestParam(value = "userName", required = false) String userName){
 
         List<PhoneLineDtoResponse> phoneLines;
@@ -152,7 +152,7 @@ public class EmployeeController {
         return phoneLines.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(phoneLines) : ResponseEntity.ok(phoneLines);
     }
 
-    @GetMapping("/bills/")
+    @GetMapping("/bills")
     public ResponseEntity<?> getBills(@RequestParam(value = "idBill", required = false) Integer idBill){
 
         if (idBill != null) {
@@ -172,7 +172,7 @@ public class EmployeeController {
         return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
     }
 
-    @GetMapping("/tariffs/")
+    @GetMapping("/tariffs")
     public ResponseEntity<?> getTariffs(@RequestParam(value = "idTariff", required = false) Integer idTariff){
 
         if (idTariff == null) {

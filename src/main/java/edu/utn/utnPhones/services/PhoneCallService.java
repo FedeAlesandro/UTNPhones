@@ -1,12 +1,12 @@
 package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.exceptions.NotFoundException;
-import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
-import edu.utn.utnPhones.repositories.PhoneCallRepository;
 import edu.utn.utnPhones.models.PhoneCall;
+import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import edu.utn.utnPhones.models.projections.CallsByDateRange;
 import edu.utn.utnPhones.models.projections.CallsByUser;
 import edu.utn.utnPhones.models.projections.MostCalledDestination;
+import edu.utn.utnPhones.repositories.PhoneCallRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,7 @@ public class PhoneCallService {
         PhoneCall phoneCallToAdd = PhoneCall.fromDto(phoneCall);
 
         phoneCallToAdd = phoneCallRepository.save(phoneCallToAdd);
+
         phoneCallToAdd.setDate(phoneCallRepository.getDateById(phoneCallToAdd.getId()));
 
         return phoneCallToAdd;

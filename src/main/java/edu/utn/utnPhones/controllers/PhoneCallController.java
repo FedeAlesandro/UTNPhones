@@ -9,6 +9,7 @@ import edu.utn.utnPhones.services.PhoneCallService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PhoneCallController {
         return phoneCallService.getByUser(idUser);
     }
 
-    public PhoneCall add(PhoneCallDtoAdd phoneCall){
+    public PhoneCall add(PhoneCallDtoAdd phoneCall) {
 
         return phoneCallService.add(phoneCall);
     }

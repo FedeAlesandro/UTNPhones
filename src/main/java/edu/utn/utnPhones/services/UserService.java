@@ -5,14 +5,14 @@ import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.City;
+import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
+import edu.utn.utnPhones.models.enums.UserType;
+import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.repositories.CityRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
-import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.enums.UserType;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
-import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,18 +23,20 @@ import java.util.Optional;
 
 import static edu.utn.utnPhones.utils.Constants.DUPLICATED_USERNAME;
 import static edu.utn.utnPhones.utils.Constants.LOCATION_NOT_EXIST;
+import static edu.utn.utnPhones.utils.Constants.LOGIN_FAILED;
 import static edu.utn.utnPhones.utils.Constants.NOT_ADDED_USER;
 import static edu.utn.utnPhones.utils.Constants.NOT_UPDATED_USER;
+import static edu.utn.utnPhones.utils.Constants.UNAUTHORIZED_USER_HANDLING;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST_ID;
-import static edu.utn.utnPhones.utils.Constants.UNAUTHORIZED_USER_HANDLING;
-import static edu.utn.utnPhones.utils.Constants.LOGIN_FAILED;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final PhoneLineService phoneLineService;
 
     private final CityRepository cityRepository;
 
@@ -54,17 +56,13 @@ public class UserService {
     public User add(UserDtoAdd user){
 
         userTypeVerification(UserType.getUserType(user.getUserType()));
-
         City city = cityVerification(user.getCity(), user.getAreaCode(), user.getProvince());
 
         User newUser = User.fromUserDtoAdd(user, city);
-
         userNameVerification(newUser.getUserName(),null);
-
         dniSearch(user.getDni()).ifPresent(newUser::setId);
 
         newUser.setPwd(passwordEncoder.encode(newUser.getPwd()));
-
         newUser = userRepository.save(newUser);
         newUser.setId(userRepository.getIdByUserName(newUser.getUserName(), false));
 
@@ -74,10 +72,11 @@ public class UserService {
     public void remove(Integer idUser) {
 
         User deletedUser = idRemovedVerification(idUser);
-
         userTypeVerification(deletedUser.getUserType());
-
         deletedUser.setRemoved(true);
+
+        deletedUser.getPhoneLines()
+                .forEach(phoneLine -> phoneLineService.remove(phoneLine.getId()));
 
         userRepository.save(deletedUser);
     }
@@ -85,16 +84,12 @@ public class UserService {
     public User update(Integer idUser, UserDtoPut updatedUser) {
 
         User oldUser = idRemovedVerification(idUser);
-
         userTypeVerification(oldUser.getUserType());
-
         dniVerification(updatedUser.getDni(), idUser);
-
         userNameVerification(updatedUser.getUserName(), idUser);
+        updatedUser.setPwd(passwordEncoder.encode(updatedUser.getPwd()));
 
         City city = cityVerification(updatedUser.getCity(), updatedUser.getAreaCode(), updatedUser.getProvince());
-
-        updatedUser.setPwd(passwordEncoder.encode(updatedUser.getPwd()));
 
         return userRepository.save(User.fromUserDtoPut(updatedUser, oldUser, city));
     }
@@ -102,7 +97,6 @@ public class UserService {
     public User partialUpdate(Integer idUser, UserDtoPatch updatedUser) {
 
         User oldUser = idRemovedVerification(idUser);
-
         userTypeVerification(oldUser.getUserType());
 
         if (updatedUser.getDni() != null){
@@ -168,7 +162,6 @@ public class UserService {
         User previousUser = userRepository.findByDni(dni);
 
         if (previousUser != null) {
-
             if (previousUser.getRemoved()) {
 
                 return Optional.of(previousUser.getId());
