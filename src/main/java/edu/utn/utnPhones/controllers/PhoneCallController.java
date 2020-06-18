@@ -1,6 +1,5 @@
 package edu.utn.utnPhones.controllers;
 
-import edu.utn.utnPhones.models.PhoneCall;
 import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import edu.utn.utnPhones.models.projections.CallsByDateRange;
 import edu.utn.utnPhones.models.projections.CallsByUser;
@@ -9,7 +8,7 @@ import edu.utn.utnPhones.services.PhoneCallService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
-import java.sql.SQLException;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class PhoneCallController {
         return phoneCallService.getByUser(idUser);
     }
 
-    public PhoneCall add(PhoneCallDtoAdd phoneCall) {
+    public URI add(PhoneCallDtoAdd phoneCall) {
 
         return phoneCallService.add(phoneCall);
     }

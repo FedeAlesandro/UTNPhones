@@ -17,7 +17,9 @@ import edu.utn.utnPhones.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +55,7 @@ public class UserService {
         return userRepository.findByUserTypeAndRemoved(UserType.client, false);
     }
 
-    public User add(UserDtoAdd user){
+    public URI add(UserDtoAdd user){
 
         userTypeVerification(UserType.getUserType(user.getUserType()));
         City city = cityVerification(user.getCity(), user.getAreaCode(), user.getProvince());
@@ -66,7 +68,15 @@ public class UserService {
         newUser = userRepository.save(newUser);
         newUser.setId(userRepository.getIdByUserName(newUser.getUserName(), false));
 
-        return newUser;
+        return getLocation(newUser);
+    }
+
+    private URI getLocation(User user) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{idUser}")
+                .buildAndExpand(user.getId())
+                .toUri();
     }
 
     public void remove(Integer idUser) {

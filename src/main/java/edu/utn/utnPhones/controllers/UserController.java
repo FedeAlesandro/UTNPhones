@@ -9,6 +9,7 @@ import edu.utn.utnPhones.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
+import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,7 @@ public class UserController {
         return  userService.getClient(userName);
     }
 
-    public User add(UserDtoAdd user){
+    public URI add(UserDtoAdd user){
 
         return userService.add(user);
     }

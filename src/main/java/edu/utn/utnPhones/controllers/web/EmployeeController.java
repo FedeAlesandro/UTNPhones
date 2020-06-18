@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,11 +71,9 @@ public class EmployeeController {
     }
 
     @PostMapping("/clients")
-    public ResponseEntity<UserDtoResponse> addUser(@RequestBody @Valid UserDtoAdd user){
+    public ResponseEntity<URI> addUser(@RequestBody @Valid UserDtoAdd user){
 
-        User addedUser = userController.add(user);
-
-        return ResponseEntity.ok(UserDtoResponse.fromUser(addedUser));
+        return ResponseEntity.created(userController.add(user)).build();
     }
 
     @DeleteMapping("/clients/{idUser}")
@@ -110,9 +109,9 @@ public class EmployeeController {
     }
 
     @PostMapping("/phone-lines")
-    public ResponseEntity<PhoneLineDtoResponse> addPhoneLine(@RequestBody @Valid PhoneLineDtoAdd phoneLine){
+    public ResponseEntity<URI> addPhoneLine(@RequestBody @Valid PhoneLineDtoAdd phoneLine){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(PhoneLineDtoResponse.fromPhoneLine(phoneLineController.add(phoneLine)));
+        return ResponseEntity.created(phoneLineController.add(phoneLine)).build();
     }
 
     @PutMapping("/phone-lines/{id}")
@@ -170,6 +169,12 @@ public class EmployeeController {
         List<BillsWithoutPhoneCalls> bills = billController.getBills();
 
         return bills.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bills);
+    }
+
+    @PatchMapping("/bills/{idBill}")
+    public ResponseEntity<BillDtoResponse> payBill(@PathVariable("idBill") Integer idBill){
+
+        return ResponseEntity.ok(BillDtoResponse.fromBillPayed(billController.payBill(idBill)));
     }
 
     @GetMapping("/tariffs")

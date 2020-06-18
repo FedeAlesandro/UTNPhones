@@ -30,4 +30,9 @@ public class BillController {
 
         return billService.getBillById(idBill);
     }
+
+    public Bill payBill(Integer idBill) {
+
+        return billService.payBill(idBill);
+    }
 }
