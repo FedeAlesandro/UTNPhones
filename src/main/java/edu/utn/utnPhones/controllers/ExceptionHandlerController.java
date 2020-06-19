@@ -1,10 +1,10 @@
 package edu.utn.utnPhones.controllers;
 
+import edu.utn.utnPhones.exceptions.AlreadyExistsException;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
-import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.dtos.responses.ErrorDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.NotValidDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.NotValidFieldDtoResponse;
@@ -65,8 +65,8 @@ public class ExceptionHandlerController {
                         .build());
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorDtoResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorDtoResponse> handleAlreadyExistsException(AlreadyExistsException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
                         .errorCode(4)

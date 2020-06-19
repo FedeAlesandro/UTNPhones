@@ -174,7 +174,13 @@ public class EmployeeController {
     @PatchMapping("/bills/{idBill}")
     public ResponseEntity<BillDtoResponse> payBill(@PathVariable("idBill") Integer idBill){
 
-        return ResponseEntity.ok(BillDtoResponse.fromBillPayed(billController.payBill(idBill)));
+        Bill bill = billController.payBill(idBill);
+        List<PhoneCallDtoResponse> calls = bill.getCalls()
+                .stream()
+                .map(PhoneCallDtoResponse::fromPhoneCall)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(BillDtoResponse.fromBill(bill, calls));
     }
 
     @GetMapping("/tariffs")

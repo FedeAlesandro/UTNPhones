@@ -36,19 +36,8 @@ public class BillDtoResponse {
 
         return BillDtoResponse.builder()
                 .id(bill.getId())
+                .callsAmount(bill.getCallsAmount())
                 .calls(calls)
-                .totalCost(bill.getTotalCost())
-                .totalPrice(bill.getTotalPrice())
-                .date(bill.getDate())
-                .dateExpiration(bill.getDateExpiration())
-                .state(bill.getState())
-                .build();
-    }
-
-    public static BillDtoResponse fromBillPayed(Bill bill) {
-
-        return BillDtoResponse.builder()
-                .id(bill.getId())
                 .totalCost(bill.getTotalCost())
                 .totalPrice(bill.getTotalPrice())
                 .date(bill.getDate())

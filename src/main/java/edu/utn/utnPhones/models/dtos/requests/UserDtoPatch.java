@@ -14,11 +14,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserDtoPatch {
 
-    @Pattern(regexp = "[a-zA-Z]+", message = "Name should contain only letters")
+    @Pattern(regexp = "[A-Za-záéíóúÁÉÍÓÚ]+", message = "Name should contain only letters")
     @Size(min = 2, max = 40, message = "Invalid size for name")
     private String name;
 
-    @Pattern(regexp = "[a-zA-Z]+", message = "Last name should contain only letters")
+    @Pattern(regexp = "[A-Za-záéíóúÁÉÍÓÚ]+", message = "Last name should contain only letters")
     @Size(min = 2, max = 40, message = "Invalid size for last name")
     private String lastName;
 
