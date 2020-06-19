@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PhoneLineRepository extends JpaRepository<PhoneLine, Integer> {
@@ -22,10 +23,9 @@ public interface PhoneLineRepository extends JpaRepository<PhoneLine, Integer> {
 
     PhoneLine findByPhoneNumber(String phoneNumber);
 
-    @Query(value = "select * " +
-            "from phone_lines pl " +
-            "join users u " +
-            "on u.id_user = pl.id_user " +
-            "where u.user_name = ?1 and u.removed_user = ?2 ;", nativeQuery = true)
-    List<PhoneLine> findByUserName(String userName, Boolean removed);
+    @Query (value = "select * from phone_lines where id_phone_line = ?1 and state <> 'removed' ;", nativeQuery = true)
+    Optional<PhoneLine> findByPhoneNumberAndNotRemoved(String phoneNumber);
+
+    @Query (value = "select * from phone_lines where id_phone_line = ?1 and state <> 'removed' ;", nativeQuery = true)
+    Optional<PhoneLine> findByIdAndState(Integer id);
 }

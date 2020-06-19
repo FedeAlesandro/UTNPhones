@@ -1,7 +1,7 @@
 package edu.utn.utnPhones.services;
 
+import edu.utn.utnPhones.exceptions.AlreadyExistsException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
-import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
@@ -16,9 +16,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static edu.utn.utnPhones.utils.Constants.ALREADY_EXISTS_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
-import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_NOT_REMOVED;
-import static edu.utn.utnPhones.utils.Constants.PHONE_LINE_REMOVED;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
 @Service
@@ -36,7 +35,10 @@ public class PhoneLineService {
 
     public List<PhoneLine> getByUserName(String userName) {
 
-        List<PhoneLine> phoneLines = phoneLineRepository.findByUserName(userName, false);
+        userRepository.findByUserNameAndRemoved(userName, false)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+
+        List<PhoneLine> phoneLines = phoneLineRepository.getAll();
 
         return phoneLines.stream()
                 .filter(phoneLine -> !phoneLine.getState().equals(PhoneLineStatus.removed))
@@ -45,7 +47,7 @@ public class PhoneLineService {
 
     public URI add (PhoneLineDtoAdd phoneLineAdd){
 
-        userRepository.findById(phoneLineAdd.getUser().getId())
+        userRepository.findByIdAndRemoved(phoneLineAdd.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         PhoneLine oldPhoneLine = phoneLineRepository.findByPhoneNumber(phoneLineAdd.getPhoneNumber());
@@ -60,7 +62,7 @@ public class PhoneLineService {
 
                 return getLocation(phoneLineRepository.save(oldPhoneLine));
             }else
-                throw new PhoneLineRemovedException(PHONE_LINE_NOT_REMOVED);
+                throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);
         }
 
         return getLocation(phoneLineRepository.save(phoneLine));
@@ -76,13 +78,13 @@ public class PhoneLineService {
 
     public PhoneLine update (Integer id, PhoneLineDtoUpdate phoneLineUpdate){
 
-        PhoneLine phoneLine = phoneLineRepository.findById(id)
+        PhoneLine phoneLine = phoneLineRepository.findByIdAndState(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
 
-        if (phoneLine.getState().equals(PhoneLineStatus.removed))
-            throw new PhoneLineRemovedException(PHONE_LINE_REMOVED);
+        if(phoneLineRepository.findByPhoneNumber(phoneLineUpdate.getPhoneNumber()) != null)
+            throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);
 
-        userRepository.findById(phoneLineUpdate.getUser().getId())
+        userRepository.findByIdAndRemoved(phoneLineUpdate.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
         phoneLine.setUser(phoneLineUpdate.getUser());
@@ -95,7 +97,7 @@ public class PhoneLineService {
 
     public void remove (Integer id){
 
-        phoneLineRepository.findById(id)
+        phoneLineRepository.findByIdAndState(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
 
         phoneLineRepository.remove(id);

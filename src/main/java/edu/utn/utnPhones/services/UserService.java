@@ -1,9 +1,9 @@
 package edu.utn.utnPhones.services;
 
+import edu.utn.utnPhones.exceptions.AlreadyExistsException;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
-import edu.utn.utnPhones.exceptions.UserAlreadyExistsException;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
@@ -176,7 +176,7 @@ public class UserService {
 
                 return Optional.of(previousUser.getId());
             } else {
-                throw new UserAlreadyExistsException(NOT_ADDED_USER);
+                throw new AlreadyExistsException(NOT_ADDED_USER);
             }
         }
 
@@ -192,7 +192,7 @@ public class UserService {
     private void dniVerification(String dni, Integer idUser){
 
         if (userRepository.findByDniAndId(dni, idUser).isPresent()) {
-            throw new UserAlreadyExistsException(NOT_UPDATED_USER);
+            throw new AlreadyExistsException(NOT_UPDATED_USER);
         }
     }
 }

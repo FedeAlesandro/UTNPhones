@@ -6,7 +6,7 @@ public class Constants {
 
     public static final String NOT_FOUND_PHONE_LINE = "Phone line not found";
     public static final String PHONE_LINE_REMOVED = "This phone line is removed";
-    public static final String PHONE_LINE_NOT_REMOVED= "This phone line already exists";
+    public static final String ALREADY_EXISTS_PHONE_LINE = "This phone line already exists";
 
     public static final String USER_NOT_EXIST = "This user doesn't exist";
     public static final String USER_NOT_EXIST_ID = "The user with the specified id doesn't exist";

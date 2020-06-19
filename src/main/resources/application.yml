@@ -14,11 +14,4 @@ spring:
     serialization:
       write_dates_as_timestamps: false
 
-#spring:
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
-#  jpa:
-#    show-sql: true
 

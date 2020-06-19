@@ -227,4 +227,32 @@ begin
 	call sp_generate_expired_bills();
 end//
 
-        
+create user 'infrastructure'@'localhost';
+set password for 'infrastructure'@'localhost' = password('infrastructure');
+
+create user 'employee'@'localhost';
+set password for 'employee'@'localhost' = password('employee');
+
+create user 'client'@'localhost';
+set password for 'client'@'localhost' = password('client');
+
+# INFRASTRUCTURE GRANTS
+grant select, insert on utn_phones.phone_calls to 'infrastructure'@'localhost';
+grant select on utn_phones.users to 'infrastructure'@'localhost';
+
+# EMPLOYEE GRANTS
+grant select, insert, update on utn_phones.users to 'employee'@'localhost';
+grant select on utn_phones.phone_calls to 'employee'@'localhost';
+grant select, insert, update on utn_phones.phone_lines to 'employee'@'localhost';
+grant select, update on utn_phones.bills to 'employee'@'localhost';
+grant select on utn_phones.tariffs to 'employee'@'localhost';
+grant select on utn_phones.cities to 'employee'@'localhost';
+grant select on utn_phones.provinces to 'employee'@'localhost';
+
+# CLIENTS GRANTS
+grant select on utn_phones.phone_calls to 'client'@'localhost';
+grant select on utn_phones.bills to 'client'@'localhost';
+grant select on utn_phones.users to 'client'@'localhost';
+grant select on utn_phones.cities to 'client'@'localhost';
+grant select on utn_phones.provinces to 'client'@'localhost';
+grant select on utn_phones.phone_lines to 'client'@'localhost';
