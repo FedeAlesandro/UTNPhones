@@ -6,6 +6,7 @@ import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
+import edu.utn.utnPhones.repositories.CityRepository;
 import edu.utn.utnPhones.repositories.PhoneLineRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static edu.utn.utnPhones.utils.Constants.ALREADY_EXISTS_PHONE_LINE;
+import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_AREA_CODE;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
@@ -27,6 +29,8 @@ public class PhoneLineService {
     private final PhoneLineRepository phoneLineRepository;
 
     private final UserRepository userRepository;
+
+    private final CityRepository cityRepository;
 
     public List<PhoneLine> getAll(){
 
@@ -49,6 +53,9 @@ public class PhoneLineService {
 
         userRepository.findByIdAndRemoved(phoneLineAdd.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+
+        cityRepository.findAreaCodeByPhoneNumber(phoneLineAdd.getPhoneNumber())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_AREA_CODE));
 
         PhoneLine oldPhoneLine = phoneLineRepository.findByPhoneNumber(phoneLineAdd.getPhoneNumber());
         PhoneLine phoneLine = PhoneLine.fromPhoneLineAdd(phoneLineAdd);
@@ -80,6 +87,9 @@ public class PhoneLineService {
 
         PhoneLine phoneLine = phoneLineRepository.findByIdAndState(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_PHONE_LINE));
+
+        cityRepository.findAreaCodeByPhoneNumber(phoneLineUpdate.getPhoneNumber())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_AREA_CODE));
 
         if(phoneLineRepository.findByPhoneNumber(phoneLineUpdate.getPhoneNumber()) != null)
             throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);

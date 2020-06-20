@@ -3,7 +3,6 @@ use utn_phones;
 SET GLOBAL time_zone = '-03:00';
 SET GLOBAL event_scheduler = ON;
 SET AUTOCOMMIT=0;
-#drop database utn_phones;
 
 create table provinces(
 	id_province int auto_increment,
@@ -91,9 +90,7 @@ begin
         on u.id_city = c.id_city
         join phone_lines as pl
         on pl.id_user = u.id_user
-        join phone_calls as pc
-        on pc.id_origin_phone_line = pl.id_phone_line
-        where pc.origin_phone_number like CONCAT(c.area_code,'%') and pc.origin_phone_number = origin_phone_number);
+        where pl.phone_number like CONCAT(c.area_code,'%') and pl.phone_number = origin_phone_number);
     
     set destination_id_city = (select distinct c.id_city
 		from cities as c
@@ -101,9 +98,8 @@ begin
         on u.id_city = c.id_city
         join phone_lines as pl
         on pl.id_user = u.id_user
-        join phone_calls as pc
-        on pc.id_destination_phone_line = pl.id_phone_line
-        where pc.destination_phone_number like CONCAT(c.area_code,'%') and pc.destination_phone_number = destination_phone_number);
+        where pl.phone_number like CONCAT(c.area_code,'%') and pl.phone_number = destination_phone_number);
+        
 end //
 
 delimiter //
@@ -151,6 +147,7 @@ end //
 delimiter //
 create procedure sp_generate_bills ()
 begin
+
 	declare done int default 0;
     declare v_id_phone_line int;
 	declare cur_phone_lines cursor for select id_phone_line from phone_lines;
@@ -159,6 +156,7 @@ begin
 	start transaction;
     
     open cur_phone_lines;
+    
     get_id : loop
 		fetch cur_phone_lines into v_id_phone_line;
         if done = 1 then
@@ -193,6 +191,7 @@ begin
 	start transaction;
     
     open cur_phone_lines;
+    
     get_id : loop
 		fetch cur_phone_lines into v_id_phone_line;
         if done = 1 then
@@ -209,6 +208,7 @@ begin
     
 end //
 
+# EVENTS
 delimiter //
 create event if not exists event_bills
 on schedule every 1 month 
@@ -227,6 +227,7 @@ begin
 	call sp_generate_expired_bills();
 end//
 
+# USERS 
 create user 'infrastructure'@'localhost';
 set password for 'infrastructure'@'localhost' = password('infrastructure');
 
@@ -256,3 +257,20 @@ grant select on utn_phones.users to 'client'@'localhost';
 grant select on utn_phones.cities to 'client'@'localhost';
 grant select on utn_phones.provinces to 'client'@'localhost';
 grant select on utn_phones.phone_lines to 'client'@'localhost';
+
+# INDEX 
+create index idx_phone_calls on phone_calls (date_call) using btree; 
+
+explain select pc.origin_phone_number, co.city_name, pc.destination_phone_number, cd.city_name, pc.total_price, pc.duration, pc.date_call
+	from phone_calls as pc
+	join phone_lines as pl
+	on pc.id_origin_phone_line=pl.id_phone_line
+	join users as u
+	on pl.id_user = u.id_user
+    join tariffs as t 
+    on t.id_tariff = pc.id_tariff
+    join cities as co
+    on t.id_origin_city = co.id_city
+    join cities as cd
+    on t.id_destination_city = cd.id_city
+	where u.id_user = 4 AND pc.date_call BETWEEN "2015-03-21" AND "2021-10-15" ;
