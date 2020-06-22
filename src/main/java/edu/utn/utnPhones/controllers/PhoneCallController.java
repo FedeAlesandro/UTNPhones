@@ -1,5 +1,6 @@
 package edu.utn.utnPhones.controllers;
 
+import edu.utn.utnPhones.models.PhoneCall;
 import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import edu.utn.utnPhones.models.projections.CallsByDateRange;
 import edu.utn.utnPhones.models.projections.CallsByUser;
@@ -33,7 +34,7 @@ public class PhoneCallController {
         return phoneCallService.getByUser(idUser);
     }
 
-    public URI add(PhoneCallDtoAdd phoneCall) {
+    public PhoneCall add(PhoneCallDtoAdd phoneCall) {
 
         return phoneCallService.add(phoneCall);
     }

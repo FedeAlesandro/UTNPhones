@@ -49,7 +49,7 @@ public class PhoneLineService {
                 .collect(Collectors.toList());
     }
 
-    public URI add (PhoneLineDtoAdd phoneLineAdd){
+    public PhoneLine add (PhoneLineDtoAdd phoneLineAdd){
 
         userRepository.findByIdAndRemoved(phoneLineAdd.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
@@ -67,20 +67,12 @@ public class PhoneLineService {
                 oldPhoneLine.setUser(phoneLineAdd.getUser());
                 oldPhoneLine.setState(PhoneLineStatus.register);
 
-                return getLocation(phoneLineRepository.save(oldPhoneLine));
+                return phoneLineRepository.save(oldPhoneLine);
             }else
                 throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);
         }
 
-        return getLocation(phoneLineRepository.save(phoneLine));
-    }
-
-    private URI getLocation(PhoneLine phoneLine) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{idPhoneLine}")
-                .buildAndExpand(phoneLine.getId())
-                .toUri();
+        return phoneLineRepository.save(phoneLine);
     }
 
     public PhoneLine update (Integer id, PhoneLineDtoUpdate phoneLineUpdate){

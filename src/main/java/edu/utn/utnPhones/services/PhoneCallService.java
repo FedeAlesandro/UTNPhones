@@ -26,7 +26,7 @@ public class PhoneCallService {
 
     private final UserRepository userRepository;
 
-    public URI add(PhoneCallDtoAdd phoneCall) {
+    public PhoneCall add(PhoneCallDtoAdd phoneCall) {
 
         PhoneCall phoneCallToAdd = PhoneCall.fromDto(phoneCall);
 
@@ -34,15 +34,7 @@ public class PhoneCallService {
 
         phoneCallToAdd.setDate(phoneCallRepository.getDateById(phoneCallToAdd.getId()));
 
-        return getLocation(phoneCallToAdd);
-    }
-
-    private URI getLocation(PhoneCall phoneCall) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{idPhoneCall}")
-                .buildAndExpand(phoneCall.getId())
-                .toUri();
+        return phoneCallToAdd;
     }
 
     public List<CallsByDateRange> getCallsByDateRange(Integer idUser, Date date1, Date date2) {
