@@ -1,4 +1,4 @@
-package edu.utn.utnPhones.models.projections.implementations;
+package edu.utn.utnPhones.implementations;
 
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 

@@ -28,7 +28,7 @@ public class UserController {
         return  userService.getClient(userName);
     }
 
-    public URI add(UserDtoAdd user){
+    public User add(UserDtoAdd user){
 
         return userService.add(user);
     }

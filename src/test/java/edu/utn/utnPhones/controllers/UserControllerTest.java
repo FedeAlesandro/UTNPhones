@@ -5,7 +5,7 @@ import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.Province;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.enums.UserType;
-import edu.utn.utnPhones.models.projections.implementations.ClientsWithoutPasswordTestImpl;
+import edu.utn.utnPhones.implementations.ClientsWithoutPasswordTestImpl;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.services.UserService;
 import edu.utn.utnPhones.utils.Constants;

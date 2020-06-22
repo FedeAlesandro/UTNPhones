@@ -55,7 +55,7 @@ public class UserService {
         return userRepository.findByUserTypeAndRemoved(UserType.client, false);
     }
 
-    public URI add(UserDtoAdd user){
+    public User add(UserDtoAdd user){
 
         userTypeVerification(UserType.getUserType(user.getUserType()));
         City city = cityVerification(user.getCity(), user.getAreaCode(), user.getProvince());
@@ -68,15 +68,7 @@ public class UserService {
         newUser = userRepository.save(newUser);
         newUser.setId(userRepository.getIdByUserName(newUser.getUserName(), false));
 
-        return getLocation(newUser);
-    }
-
-    private URI getLocation(User user) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{idUser}")
-                .buildAndExpand(user.getId())
-                .toUri();
+        return newUser;
     }
 
     public void remove(Integer idUser) {

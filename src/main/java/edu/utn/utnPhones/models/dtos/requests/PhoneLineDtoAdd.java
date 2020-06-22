@@ -2,6 +2,7 @@ package edu.utn.utnPhones.models.dtos.requests;
 
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.enums.LineType;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 public class PhoneLineDtoAdd {
 
     @NotNull

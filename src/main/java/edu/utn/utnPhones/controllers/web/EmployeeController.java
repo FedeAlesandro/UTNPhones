@@ -6,6 +6,7 @@ import edu.utn.utnPhones.controllers.PhoneLineController;
 import edu.utn.utnPhones.controllers.TariffController;
 import edu.utn.utnPhones.controllers.UserController;
 import edu.utn.utnPhones.models.Bill;
+import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -73,7 +75,7 @@ public class EmployeeController {
     @PostMapping("/clients")
     public ResponseEntity<URI> addUser(@RequestBody @Valid UserDtoAdd user){
 
-        return ResponseEntity.created(userController.add(user)).build();
+        return ResponseEntity.created(getLocation(userController.add(user))).build();
     }
 
     @DeleteMapping("/clients/{idUser}")
@@ -111,7 +113,7 @@ public class EmployeeController {
     @PostMapping("/phone-lines")
     public ResponseEntity<URI> addPhoneLine(@RequestBody @Valid PhoneLineDtoAdd phoneLine){
 
-        return ResponseEntity.created(phoneLineController.add(phoneLine)).build();
+        return ResponseEntity.created(getLocation(phoneLineController.add(phoneLine))).build();
     }
 
     @PutMapping("/phone-lines/{id}")
@@ -198,5 +200,21 @@ public class EmployeeController {
         Tariff tariff = tariffController.getById(idTariff);
 
         return ResponseEntity.ok(TariffDtoResponse.fromTariff(tariff));
+    }
+
+    private URI getLocation(PhoneLine phoneLine) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{idPhoneLine}")
+                .buildAndExpand(phoneLine.getId())
+                .toUri();
+    }
+
+    private URI getLocation(User user) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{idUser}")
+                .buildAndExpand(user.getId())
+                .toUri();
     }
 }

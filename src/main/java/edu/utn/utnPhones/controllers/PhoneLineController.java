@@ -26,7 +26,7 @@ public class PhoneLineController {
         return phoneLineService.getByUserName(userName);
     }
 
-    public URI add(PhoneLineDtoAdd phoneLine){
+    public PhoneLine add(PhoneLineDtoAdd phoneLine){
 
         return phoneLineService.add(phoneLine);
     }
