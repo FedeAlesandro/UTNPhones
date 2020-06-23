@@ -60,8 +60,6 @@ public class PhoneCall {
     @JsonBackReference(value = "callBill")
     private Bill bill;
 
-    @NotNull(message = "The call duration is required")
-    @Min(value = 0, message = "Incorrect duration")
     @Column(name = "duration")
     private Integer duration;
 
@@ -71,15 +69,9 @@ public class PhoneCall {
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
-    @NotBlank(message = "An origin phone number is required")
-    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
-    @Size(min = 6, max = 32, message = "Invalid size for phone number")
     @Column(name = "origin_phone_number")
     private String originPhoneNumber;
 
-    @NotBlank(message = "A destination phone number is required")
-    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
-    @Size(min = 6, max = 32, message = "Invalid size for phone number")
     @Column(name = "destination_phone_number")
     private String destinationPhoneNumber;
 

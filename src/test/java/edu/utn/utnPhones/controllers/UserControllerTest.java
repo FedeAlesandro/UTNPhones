@@ -4,7 +4,11 @@ import edu.utn.utnPhones.exceptions.NotFoundException;
 import edu.utn.utnPhones.implementations.ClientsWithoutPasswordTestImpl;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.Province;
+import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.User;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.enums.UserType;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.services.UserService;
@@ -17,10 +21,11 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class UserControllerTest {
+public class UserControllerTest implements FactoryController{
 
     UserController userController;
 
@@ -34,44 +39,51 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetClientsEmpty(){
+    public void getClientsOk(){
+        when(userService.getClients()).thenReturn(new ArrayList<>());
 
-        List<ClientsWithoutPassword> clientsList = new ArrayList<>();
-        when(userService.getClients()).thenReturn(clientsList);
-        Assert.assertTrue(clientsList.isEmpty());
+        Assert.assertEquals(new ArrayList<ClientsWithoutPassword>(), userController.getClients());
     }
 
     @Test
-    public void testGetClientsOk(){
-        List<ClientsWithoutPassword> clientsList = new ArrayList<>();
-        clientsList.add(new ClientsWithoutPasswordTestImpl());
-        when(userService.getClients()).thenReturn(clientsList);
-        Assert.assertFalse(clientsList.isEmpty());
+    public void getClientOk(){
+        when(userService.getClient("Euvenias")).thenReturn(new User());
+
+        Assert.assertEquals(new User(), userController.getClient("Euvenias"));
     }
 
     @Test
-    public void testGetClientOk(){
-        Province province = new Province(1, "Buenos Aires");
-        User oldUser = User.builder()
-                .id(1)
-                .city(new City(1, province, "Mar del Plata", "223"))
-                .name("Fede")
-                .lastName("Fede")
-                .dni("12345678")
-                .userName("Euvenias")
-                .pwd("pwd")
-                .userType(UserType.client)
-                .removed(false)
-                .build();
+    public void addOk(){
+        when(userService.add(createUserDtoAdd())).thenReturn(new User());
 
-        when(userService.getClient("Euvenias")).thenReturn(oldUser);
-        User user = userController.getClient("Euvenias");
-        Assert.assertEquals(oldUser.getId(), user.getId());
+        Assert.assertEquals(new User(), userController.add(createUserDtoAdd()));
     }
 
-    @Test(expected = NotFoundException.class)
-    public void testGetClientNotFound(){
-        when(userService.getClient("Euvenias")).thenThrow(new NotFoundException(Constants.USER_NOT_EXIST_USERNAME));
-        userController.getClient("Euvenias");
+    @Test
+    public void removeOk(){
+        doNothing().when(userService).remove(1);
+
+        userController.remove(1);
+    }
+
+    @Test
+    public void updateOk(){
+        when(userService.update(1, createUserDtoPut())).thenReturn(new User());
+
+        Assert.assertEquals(new User(), userController.update(1, createUserDtoPut()));
+    }
+
+    @Test
+    public void partialUpdateOk(){
+        when(userService.partialUpdate(1, createUserDtoPatch())).thenReturn(new User());
+
+        Assert.assertEquals(new User(), userController.partialUpdate(1, createUserDtoPatch()));
+    }
+
+    @Test
+    public void loginOk(){
+        when(userService.login("Euvenias", "1234")).thenReturn(new User());
+
+        Assert.assertEquals(new User(), userController.login("Euvenias", "1234"));
     }
 }

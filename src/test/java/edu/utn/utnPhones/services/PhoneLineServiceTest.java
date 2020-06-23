@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -172,6 +173,7 @@ public class PhoneLineServiceTest implements FactoryService{
     public void removeOk(){
 
         when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+        doNothing().when(phoneLineRepository).remove(1);
 
         phoneLineService.remove(1);
     }

@@ -24,8 +24,5 @@ public interface PhoneLineRepository extends JpaRepository<PhoneLine, Integer> {
     PhoneLine findByPhoneNumber(String phoneNumber);
 
     @Query (value = "select * from phone_lines where id_phone_line = ?1 and state <> 'removed' ;", nativeQuery = true)
-    Optional<PhoneLine> findByPhoneNumberAndNotRemoved(String phoneNumber);
-
-    @Query (value = "select * from phone_lines where id_phone_line = ?1 and state <> 'removed' ;", nativeQuery = true)
     Optional<PhoneLine> findByIdAndState(Integer id);
 }
