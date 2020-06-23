@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.utn.utnPhones.models.enums.BillStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +24,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Data
 @Entity
+@Builder
 @Table(name = "bills")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Bill {
 
     @Id

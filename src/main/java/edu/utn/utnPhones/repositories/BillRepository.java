@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -26,5 +26,5 @@ public interface BillRepository extends JpaRepository<Bill,Integer> {
             "on pl.id_user = u.id_user\n" +
             "where u.id_user = ?1 AND b.bill_date  BETWEEN ?2 AND ?3 ;"
             , nativeQuery = true)
-    List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2);
+    List<BillsForUsers> getBillsByDateRange(Integer idUser, Date date1, Date date2);
 }

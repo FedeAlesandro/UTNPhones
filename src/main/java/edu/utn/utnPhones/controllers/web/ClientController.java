@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -60,8 +59,8 @@ public class ClientController {
 
     @GetMapping("/bills")
     public ResponseEntity<List<BillsForUsers>> getBills(@RequestHeader("Authorization") String token,
-                                                                   @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
-                                                                   @RequestParam(value = "date2", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
+                                                                   @RequestParam(value = "date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date1,
+                                                                   @RequestParam(value = "date2", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date2){
 
         User currentUser = sessionManager.getCurrentUser(token);
 
