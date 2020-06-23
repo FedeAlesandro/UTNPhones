@@ -89,6 +89,7 @@ public interface FactoryService {
                 .areaCode("223")
                 .name("Mar del Plata")
                 .province(createProvince())
+                .build();
     }
 
     default PhoneLineDtoUpdate createPhoneLineDtoUpdate(){
