@@ -1,8 +1,5 @@
 package edu.utn.utnPhones.controllers;
 
-import edu.utn.utnPhones.models.PhoneCall;
-import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
-import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.models.projections.CallsByDateRange;
 import edu.utn.utnPhones.models.projections.CallsByUser;
 import edu.utn.utnPhones.models.projections.MostCalledDestination;
@@ -15,7 +12,6 @@ import org.mockito.Mock;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;

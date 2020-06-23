@@ -13,7 +13,6 @@ import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
-import edu.utn.utnPhones.models.enums.UserType;
 
 public interface FactoryController {
 
