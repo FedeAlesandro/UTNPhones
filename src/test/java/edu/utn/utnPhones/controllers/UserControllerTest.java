@@ -1,25 +1,14 @@
 package edu.utn.utnPhones.controllers;
 
-import edu.utn.utnPhones.exceptions.NotFoundException;
-import edu.utn.utnPhones.implementations.ClientsWithoutPasswordTestImpl;
-import edu.utn.utnPhones.models.City;
-import edu.utn.utnPhones.models.Province;
-import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
-import edu.utn.utnPhones.models.enums.UserType;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import edu.utn.utnPhones.services.UserService;
-import edu.utn.utnPhones.utils.Constants;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;

@@ -3,7 +3,6 @@ package edu.utn.utnPhones.controllers;
 import edu.utn.utnPhones.exceptions.AlreadyExistsException;
 import edu.utn.utnPhones.exceptions.DuplicatedUsernameException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
-import edu.utn.utnPhones.exceptions.PhoneLineRemovedException;
 import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.models.dtos.responses.ErrorDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.NotValidDtoResponse;
@@ -47,20 +46,11 @@ public class ExceptionHandlerController {
                         .build());
     }
 
-    @ExceptionHandler(PhoneLineRemovedException.class)
-    public ResponseEntity<ErrorDtoResponse> handlePhoneLineRemovedException(PhoneLineRemovedException exception){
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                        .message(exception.getMessage())
-                        .errorCode(2)
-                        .build());
-    }
-
     @ExceptionHandler(DuplicatedUsernameException.class)
     public ResponseEntity<ErrorDtoResponse> handleDuplicatedUsernameException(DuplicatedUsernameException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                        .errorCode(3)
+                        .errorCode(2)
                         .message(exception.getMessage())
                         .build());
     }
@@ -69,7 +59,7 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorDtoResponse> handleAlreadyExistsException(AlreadyExistsException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                        .errorCode(4)
+                        .errorCode(3)
                         .message(exception.getMessage())
                         .build());
     }
@@ -78,7 +68,7 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorDtoResponse> handleUnauthorizedUserTypeException(UnauthorizedUserTypeException exception){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorDtoResponse.builder()
-                        .errorCode(5)
+                        .errorCode(4)
                         .message(exception.getMessage())
                         .build());
     }

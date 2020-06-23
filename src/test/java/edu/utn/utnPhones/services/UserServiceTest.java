@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.any;
@@ -67,21 +66,10 @@ public class UserServiceTest implements FactoryService {
     }
 
     @Test
-    public void testGetClientsEmpty(){
-
-        List<ClientsWithoutPassword> fakeClientsList = new ArrayList<>();
-        when(userRepository.findByUserTypeAndRemoved(UserType.client, false)).thenReturn(fakeClientsList);
-        List<ClientsWithoutPassword> clientsList = userService.getClients();
-        Assert.assertTrue(clientsList.isEmpty());
-    }
-
-    @Test
     public void testGetClientsOk(){
 
-        List<ClientsWithoutPassword> fakeClientsList = createClientsWithoutPassword();
-        when(userRepository.findByUserTypeAndRemoved(UserType.client, false)).thenReturn(fakeClientsList);
-        List<ClientsWithoutPassword> clientsList = userService.getClients();
-        Assert.assertFalse(clientsList.isEmpty());
+        when(userRepository.findByUserTypeAndRemoved(UserType.client, false)).thenReturn(new ArrayList<>());
+        Assert.assertEquals(new ArrayList<ClientsWithoutPassword>(), userService.getClients());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package edu.utn.utnPhones.controllers;
 
 import edu.utn.utnPhones.models.Bill;
-import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.projections.BillsForUsers;
 import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.services.BillService;
