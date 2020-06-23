@@ -56,6 +56,7 @@ public class UserService {
     public User add(UserDtoAdd user){
 
         userTypeVerification(UserType.getUserType(user.getUserType()));
+
         City city = cityVerification(user.getCity(), user.getAreaCode(), user.getProvince());
 
         User newUser = User.fromUserDtoAdd(user, city);
@@ -157,7 +158,7 @@ public class UserService {
         }
     }
 
-    private Optional<Integer> dniSearch(String dni){
+    public Optional<Integer> dniSearch(String dni){
 
         User previousUser = userRepository.findByDni(dni);
 
