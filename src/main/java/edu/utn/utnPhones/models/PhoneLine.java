@@ -40,23 +40,17 @@ public class PhoneLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "An user is required")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     @JsonBackReference(value = "phoneLineUser")
     private User user;
 
-    @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "[0-9]+", message = "The phone number must contain only numbers")
-    @Size(min = 7, max = 15, message = "Invalid size for a phone number")
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @NotNull(message = "Line type is required")
     @Enumerated(EnumType.STRING)
     private LineType lineType;
 
-    @NotNull(message = "Phone line state is required")
     @Enumerated(EnumType.STRING)
     private PhoneLineStatus state;
 
