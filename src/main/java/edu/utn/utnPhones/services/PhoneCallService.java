@@ -10,9 +10,7 @@ import edu.utn.utnPhones.repositories.PhoneCallRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
