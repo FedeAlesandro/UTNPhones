@@ -1,17 +1,18 @@
 package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.implementations.ClientsWithoutPasswordTestImpl;
+import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.PhoneCall;
-import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.Province;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.enums.BillStatus;
 import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
@@ -63,6 +64,8 @@ public interface FactoryService {
         return User.builder()
                 .id(2)
                 .userName(userName)
+                .userType(UserType.client)
+                .removed(false)
                 .build();
     }
 
@@ -131,7 +134,34 @@ public interface FactoryService {
                 .build();
     }
 
+    default UserDtoPut createUserDtoPut(){
+
+        return UserDtoPut.builder()
+                .areaCode("223")
+                .city("Mar del Plata")
+                .dni("40000000")
+                .province("Buenos Aires")
+                .pwd("12345678")
+                .userName("hola1234")
+                .build();
+    }
+
+    default UserDtoPatch createUserDtoPatch(){
+
+        return UserDtoPatch.builder()
+                .areaCode("223")
+                .city("Mar del Plata")
+                .dni("40000000")
+                .province("Buenos Aires")
+                .pwd("12345678")
+                .userName("hola1234")
+                .build();
+    }
+
     default User createUser(){
+
+        List<PhoneLine> phoneLines = new ArrayList<>();
+        phoneLines.add(createPhoneLine());
 
         return User.builder()
                 .dni("38054312")
@@ -139,6 +169,7 @@ public interface FactoryService {
                 .pwd("12345678")
                 .userType(UserType.client)
                 .city(createCity())
+                .phoneLines(phoneLines)
                 .removed(false)
                 .build();
     }

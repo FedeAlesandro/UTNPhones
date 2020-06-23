@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 public class RestUtils {
+
     public static URI getLocation(PhoneCall phoneCall) {
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
