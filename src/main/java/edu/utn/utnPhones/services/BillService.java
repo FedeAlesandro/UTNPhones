@@ -9,7 +9,8 @@ import edu.utn.utnPhones.repositories.BillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_BILL;
@@ -25,10 +26,10 @@ public class BillService {
         return billRepository.getBills();
     }
 
-    public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
+    public List<BillsForUsers> getBillsByDateRange(Integer idUser, Date date1, Date date2){
 
         if (date2 == null) {
-            date2 = LocalDate.now();
+            date2 = Date.from(Instant.now());
         }
 
         return billRepository.getBillsByDateRange(idUser, date1, date2);

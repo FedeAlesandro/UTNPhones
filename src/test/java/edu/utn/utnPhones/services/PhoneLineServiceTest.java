@@ -113,5 +113,67 @@ public class PhoneLineServiceTest implements FactoryService{
 
         Assert.assertEquals(newPhoneLine, phoneLineService.add(phoneLine));
     }
+
+    @Test(expected = NotFoundException.class)
+    public void updatePhoneLineNotFoundException(){
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.empty());
+
+        phoneLineService.update(1, createPhoneLineDtoUpdate());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateAreaCodeNotFoundException(){
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+        when(cityRepository.findAreaCodeByPhoneNumber("2235860225")).thenReturn(Optional.empty());
+
+        phoneLineService.update(1, createPhoneLineDtoUpdate());
+    }
+
+    @Test(expected = AlreadyExistsException.class)
+    public void updateAlreadyExistsException(){
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+        when(cityRepository.findAreaCodeByPhoneNumber("2235860225")).thenReturn(Optional.of(new City()));
+        when(phoneLineRepository.findByPhoneNumber("2235860225")).thenReturn(new PhoneLine());
+
+        phoneLineService.update(1, createPhoneLineDtoUpdate());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateUserNotFoundException(){
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+        when(cityRepository.findAreaCodeByPhoneNumber("2235860225")).thenReturn(Optional.of(new City()));
+        when(phoneLineRepository.findByPhoneNumber("2235860225")).thenReturn(null);
+        when(userRepository.findByIdAndRemoved(1, false)).thenReturn(Optional.empty());
+
+        phoneLineService.update(1, createPhoneLineDtoUpdate());
+    }
+
+    @Test
+    public void updateOk(){
+        PhoneLine phoneLine = createPhoneLine();
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+        when(cityRepository.findAreaCodeByPhoneNumber("2235860225")).thenReturn(Optional.of(new City()));
+        when(phoneLineRepository.findByPhoneNumber("2235860225")).thenReturn(null);
+        when(userRepository.findByIdAndRemoved(1, false)).thenReturn(Optional.of(new User()));
+        when(phoneLineRepository.save(phoneLine)).thenReturn(phoneLine);
+
+        phoneLineService.update(1, createPhoneLineDtoUpdate());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void removeNotFoundException(){
+
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.empty());
+
+        phoneLineService.remove(1);
+    }
+
+    @Test
+    public void removeOk(){
+
+        when(phoneLineRepository.findByIdAndState(1)).thenReturn(Optional.of(new PhoneLine()));
+
+        phoneLineService.remove(1);
+    }
 }
 

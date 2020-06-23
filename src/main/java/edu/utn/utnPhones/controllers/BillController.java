@@ -7,7 +7,7 @@ import edu.utn.utnPhones.services.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -21,7 +21,7 @@ public class BillController {
         return billService.getBills();
     }
 
-    public List<BillsForUsers> getBillsByDateRange(Integer idUser, LocalDate date1, LocalDate date2){
+    public List<BillsForUsers> getBillsByDateRange(Integer idUser, Date date1, Date date2){
 
         return billService.getBillsByDateRange(idUser, date1, date2);
     }
