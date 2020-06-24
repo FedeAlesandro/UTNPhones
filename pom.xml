@@ -112,6 +112,8 @@
 						<exclude>**/models/**</exclude>
 						<exclude>**/configurations/**</exclude>
 						<exclude>**/utils/**</exclude>
+						<exclude>**/edu/utn/utnPhones/controllers/ExceptionHandlerController.class</exclude>
+						<exclude>**/edu/utn/utnPhones/session/Session.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -151,7 +153,7 @@
 										<limit>
 											<counter>BRANCH</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.6</minimum>
+											<minimum>0.7</minimum>
 										</limit>
 									</limits>
 								</rule>
