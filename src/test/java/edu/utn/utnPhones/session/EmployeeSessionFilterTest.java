@@ -1,5 +1,7 @@
 package edu.utn.utnPhones.session;
 
+import edu.utn.utnPhones.models.User;
+import edu.utn.utnPhones.models.enums.UserType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,17 +19,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class SessionFilterTest implements FactorySession{
+public class EmployeeSessionFilterTest implements FactorySession{
 
     @Mock
     private SessionManager sessionManager;
 
-    private SessionFilter sessionFilter;
+    private EmployeeSessionFilter employeeSessionFilter;
 
     @Before
     public void setUp(){
         initMocks(this);
-        this.sessionFilter = new SessionFilter(sessionManager);
+        this.employeeSessionFilter = new EmployeeSessionFilter(sessionManager);
     }
 
     @Test
@@ -35,11 +37,29 @@ public class SessionFilterTest implements FactorySession{
         HttpServletResponse response = mock(HttpServletResponse.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         FilterChain filterChain = mock(FilterChain.class);
+        User user = createUser();
+        user.setUserType(UserType.employee);
+
+        given(request.getHeader("Authorization")).willReturn("1234");
+
+        when(sessionManager.getSession("1234")).thenReturn(new Session("1234", user, new Date(System.currentTimeMillis())));
+
+        employeeSessionFilter.doFilterInternal(request, response, filterChain);
+
+        Assert.assertNotNull(sessionManager.getSession("1234"));
+    }
+
+    @Test
+    public void doFilterInternalUnauthorized() throws ServletException, IOException {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        FilterChain filterChain = mock(FilterChain.class);
+
         given(request.getHeader("Authorization")).willReturn("1234");
 
         when(sessionManager.getSession("1234")).thenReturn(new Session("1234", createUser(), new Date(System.currentTimeMillis())));
 
-        sessionFilter.doFilterInternal(request, response, filterChain);
+        employeeSessionFilter.doFilterInternal(request, response, filterChain);
 
         Assert.assertNotNull(sessionManager.getSession("1234"));
     }
@@ -49,11 +69,12 @@ public class SessionFilterTest implements FactorySession{
         HttpServletResponse response = mock(HttpServletResponse.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         FilterChain filterChain = mock(FilterChain.class);
+
         given(request.getHeader("Authorization")).willReturn("1234");
 
         when(sessionManager.getSession("1234")).thenReturn(null);
 
-        sessionFilter.doFilterInternal(request, response, filterChain);
+        employeeSessionFilter.doFilterInternal(request, response, filterChain);
 
         Assert.assertNull(sessionManager.getSession("1234"));
     }

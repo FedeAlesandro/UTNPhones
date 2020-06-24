@@ -1,5 +1,6 @@
 package edu.utn.utnPhones.session;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,11 @@ import java.io.IOException;
 import static edu.utn.utnPhones.utils.Constants.EMPLOYEE_SESSION;
 
 @Service
+@AllArgsConstructor
 public class EmployeeSessionFilter extends OncePerRequestFilter {
 
     @Autowired
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
