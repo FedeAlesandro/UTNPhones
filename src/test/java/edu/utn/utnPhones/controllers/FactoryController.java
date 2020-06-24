@@ -1,9 +1,11 @@
 package edu.utn.utnPhones.controllers;
 
+import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.PhoneCall;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.Province;
+import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.PhoneCallDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
@@ -136,5 +138,16 @@ public interface FactoryController {
         return UserDtoPatch.builder()
                 .userName("fabiolaguna")
                 .build();
+    }
+
+    default Bill createBill(){
+        return Bill.builder()
+                .id(1)
+                .calls(new ArrayList<>())
+                .build();
+    }
+
+    default Tariff createTariff(){
+        return new Tariff(1, createCity(), createCity(), 20f, 10f);
     }
 }
