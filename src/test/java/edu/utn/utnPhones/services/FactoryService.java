@@ -1,6 +1,5 @@
 package edu.utn.utnPhones.services;
 
-import edu.utn.utnPhones.implementations.ClientsWithoutPasswordTestImpl;
 import edu.utn.utnPhones.models.Bill;
 import edu.utn.utnPhones.models.City;
 import edu.utn.utnPhones.models.PhoneCall;
@@ -17,7 +16,6 @@ import edu.utn.utnPhones.models.enums.BillStatus;
 import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
 import edu.utn.utnPhones.models.enums.UserType;
-import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,14 +65,6 @@ public interface FactoryService {
                 .userType(UserType.client)
                 .removed(false)
                 .build();
-    }
-
-    default List<ClientsWithoutPassword> createClientsWithoutPassword(){
-
-        List<ClientsWithoutPassword> clientsList = new ArrayList<>();
-        clientsList.add(new ClientsWithoutPasswordTestImpl());
-
-        return clientsList;
     }
 
     default Province createProvince() {

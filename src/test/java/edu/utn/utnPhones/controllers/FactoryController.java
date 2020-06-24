@@ -13,6 +13,10 @@ import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
 import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
 import edu.utn.utnPhones.models.enums.LineType;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
+import edu.utn.utnPhones.models.enums.UserType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface FactoryController {
 
@@ -80,6 +84,23 @@ public interface FactoryController {
                 .areaCode("223")
                 .name("Mar del Plata")
                 .province(createProvince())
+                .build();
+    }
+
+    default User createUser(){
+
+        List<PhoneLine> phoneLines = new ArrayList<>();
+        phoneLines.add(createPhoneLine());
+
+        return User.builder()
+                .id(1)
+                .dni("38054312")
+                .userName("fabiolaguna")
+                .pwd("12345678")
+                .userType(UserType.client)
+                .city(createCity())
+                .phoneLines(phoneLines)
+                .removed(false)
                 .build();
     }
 
