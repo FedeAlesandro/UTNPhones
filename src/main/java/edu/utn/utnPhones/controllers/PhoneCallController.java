@@ -77,16 +77,14 @@ public class PhoneCallController {
     }
 
     @GetMapping("/duration/")
-    public ResponseEntity<List<PhoneCallDtoResponse>> getByDuration(@RequestParam(value = "sinceDuration") Integer sinceDuration, @RequestParam(value = "toDuration") Integer toDuration){
+    public ResponseEntity<List<PhoneCallDtoResponse>> getByDuration(@RequestParam(value = "sinceDuration") Integer sinceDuration,
+                                                                    @RequestParam(value = "toDuration") Integer toDuration){
         List<PhoneCall>phoneCalls = phoneCallService.getByDuration(sinceDuration, toDuration);
 
         List<PhoneCallDtoResponse> phoneCallResponses = phoneCalls.stream()
                 .map(PhoneCallDtoResponse::new)
                 .collect(Collectors.toList());
 
-        if (phoneCallResponses.isEmpty())
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.ok(phoneCallResponses);
+        return (phoneCallResponses.isEmpty()) ? ResponseEntity.noContent().build() : ResponseEntity.ok(phoneCallResponses);
     }
 }
