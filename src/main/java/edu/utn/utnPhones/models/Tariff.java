@@ -39,5 +39,4 @@ public class Tariff {
 
     @Column(name = "cost_per_minute")
     private Float costPerMinute;
-
 }

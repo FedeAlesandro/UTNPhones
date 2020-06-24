@@ -7,12 +7,12 @@ import edu.utn.utnPhones.controllers.PhoneLineController;
 import edu.utn.utnPhones.controllers.TariffController;
 import edu.utn.utnPhones.controllers.UserController;
 import edu.utn.utnPhones.models.PhoneLine;
-import edu.utn.utnPhones.models.User;
-import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoPatch;
-import edu.utn.utnPhones.models.dtos.requests.UserDtoPut;
+import edu.utn.utnPhones.models.Tariff;
+import edu.utn.utnPhones.models.dtos.responses.BillDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.PhoneLineDtoResponse;
+import edu.utn.utnPhones.models.dtos.responses.TariffDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.UserDtoResponse;
+import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.models.projections.CallsByUser;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
 import org.junit.Assert;
@@ -22,18 +22,9 @@ import org.mockito.Mock;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -180,4 +171,62 @@ public class EmployeeControllerTest implements FactoryController {
         Assert.assertEquals(ResponseEntity.ok(phoneLinesResponses), employeeController.getPhoneLines("Euvenias"));
     }
 
+    @Test
+    public void getBillIdOk(){
+        when(billController.getBillById(1)).thenReturn(createBill());
+
+        Assert.assertEquals(ResponseEntity.ok(BillDtoResponse.fromBill(createBill(), new ArrayList<>())), employeeController.getBills(1));
+    }
+
+    @Test
+    public void getBillsNoContent(){
+        when(billController.getBills()).thenReturn(new ArrayList<>());
+
+        Assert.assertEquals(ResponseEntity.noContent().build(), employeeController.getBills(null));
+    }
+
+    @Test
+    public void getBillsOk(){
+        List<BillsWithoutPhoneCalls> bills = new ArrayList<>();
+        BillsWithoutPhoneCalls bill = new SpelAwareProxyProjectionFactory().createProjection(BillsWithoutPhoneCalls.class);
+        bills.add(bill);
+
+        when(billController.getBills()).thenReturn(bills);
+
+        Assert.assertEquals(ResponseEntity.ok(bills), employeeController.getBills(null));
+    }
+
+    @Test
+    public void payBillOk(){
+        when(billController.payBill(1)).thenReturn(createBill());
+
+        Assert.assertEquals(ResponseEntity.ok(BillDtoResponse.fromBill(createBill(), new ArrayList<>())), employeeController.payBill(1));
+    }
+
+    @Test
+    public void getAllTariffsNoContent(){
+        when(tariffController.getAll()).thenReturn(new ArrayList<>());
+
+        Assert.assertEquals(ResponseEntity.noContent().build(), employeeController.getTariffs(null));
+    }
+
+    @Test
+    public void getAllTariffsOk(){
+        List<Tariff> tariffs = new ArrayList<>();
+        tariffs.add(createTariff());
+
+        List<TariffDtoResponse> tariffResponses = new ArrayList<>();
+        tariffResponses.add(TariffDtoResponse.fromTariff(createTariff()));
+
+        when(tariffController.getAll()).thenReturn(tariffs);
+
+        Assert.assertEquals(ResponseEntity.ok(tariffResponses), employeeController.getTariffs(null));
+    }
+
+    @Test
+    public void getTariffByIdOk(){
+        when(tariffController.getById(1)).thenReturn(createTariff());
+
+        Assert.assertEquals(ResponseEntity.ok(TariffDtoResponse.fromTariff(createTariff())), employeeController.getTariffs(1));
+    }
 }
