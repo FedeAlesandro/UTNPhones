@@ -7,4 +7,10 @@ public interface MostCalledDestination {
     String getName();
 
     Integer getCallsCount();
+
+    void setPhoneNumber(String phoneNumber);
+
+    void setName(String name);
+
+    void setCallsCount(Integer callsCount);
 }

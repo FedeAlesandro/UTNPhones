@@ -18,4 +18,14 @@ public interface BillsForUsers {
 
     @JsonFormat(timezone = "GMT-03:00", shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     Date getDateExpiration();
+
+    void setUsername();
+
+    void setCallsAmount();
+
+    void setTotalPrice();
+
+    void setDate();
+
+    void setDateExpiration();
 }
