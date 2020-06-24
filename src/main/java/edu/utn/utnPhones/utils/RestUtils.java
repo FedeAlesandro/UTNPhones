@@ -10,6 +10,7 @@ import java.net.URI;
 public class RestUtils {
 
     public static URI getLocation(PhoneCall phoneCall) {
+
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{idPhoneCall}")
@@ -18,6 +19,7 @@ public class RestUtils {
     }
 
     public static URI getLocation(PhoneLine phoneLine) {
+
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{idPhoneLine}")
@@ -26,6 +28,7 @@ public class RestUtils {
     }
 
     public static URI getLocation(User user) {
+
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{idUser}")
