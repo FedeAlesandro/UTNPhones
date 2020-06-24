@@ -9,27 +9,40 @@ import edu.utn.utnPhones.controllers.UserController;
 import edu.utn.utnPhones.models.PhoneLine;
 import edu.utn.utnPhones.models.Tariff;
 import edu.utn.utnPhones.models.dtos.responses.BillDtoResponse;
+import edu.utn.utnPhones.models.User;
+import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
+import edu.utn.utnPhones.models.dtos.requests.UserDtoAdd;
 import edu.utn.utnPhones.models.dtos.responses.PhoneLineDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.TariffDtoResponse;
 import edu.utn.utnPhones.models.dtos.responses.UserDtoResponse;
 import edu.utn.utnPhones.models.projections.BillsWithoutPhoneCalls;
 import edu.utn.utnPhones.models.projections.CallsByUser;
 import edu.utn.utnPhones.models.projections.ClientsWithoutPassword;
+import edu.utn.utnPhones.utils.RestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RestUtils.class)
 public class EmployeeControllerTest implements FactoryController {
 
     EmployeeController employeeController;
@@ -53,6 +66,7 @@ public class EmployeeControllerTest implements FactoryController {
     public void setUp(){
         initMocks(this);
         this.employeeController = new EmployeeController(userController, phoneCallController, phoneLineController, billController, tariffController);
+        mockStatic(RestUtils.class);
     }
 
     @Test
@@ -228,5 +242,40 @@ public class EmployeeControllerTest implements FactoryController {
         when(tariffController.getById(1)).thenReturn(createTariff());
 
         Assert.assertEquals(ResponseEntity.ok(TariffDtoResponse.fromTariff(createTariff())), employeeController.getTariffs(1));
+    }
+
+    @Test
+    public void testAddUser(){
+
+        UserDtoAdd userDto = createUserDtoAdd();
+        User user = createUser();
+
+        when(userController.add(userDto)).thenReturn(user);
+        when(RestUtils.getLocation(user)).thenReturn(URI.create("URI/test"));
+
+        ResponseEntity<URI> responseEntityUri = employeeController.addUser(userDto);
+        URI uri = responseEntityUri.getHeaders().getLocation();
+
+        Assert.assertEquals(uri, URI.create("URI/test"));
+    }
+
+    @Test
+    public void testAddPhoneLine(){
+
+        PhoneLineDtoAdd phoneLineDto = createPhoneLineDtoAdd();
+        PhoneLine phoneLine = createPhoneLine();
+
+        when(phoneLineController.add(phoneLineDto)).thenReturn(phoneLine);
+        when(RestUtils.getLocation(phoneLine)).thenReturn(URI.create("URI/test"));
+
+        ResponseEntity<URI> responseEntityUri = employeeController.addPhoneLine(phoneLineDto);
+        URI uri = responseEntityUri.getHeaders().getLocation();
+
+        Assert.assertEquals(uri, URI.create("URI/test"));
+    }
+
+    public ResponseEntity<URI> addPhoneLine(@RequestBody @Valid PhoneLineDtoAdd phoneLine){
+
+        return ResponseEntity.created(RestUtils.getLocation(phoneLineController.add(phoneLine))).build();
     }
 }
