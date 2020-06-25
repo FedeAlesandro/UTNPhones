@@ -33,7 +33,7 @@ db.users.insert(
 		city_name: string,
 		area_code: string
 	},
-	name: string
+	name: string,
 	last_name: string,
 	dni: string,
 	user_name: string,
@@ -60,7 +60,7 @@ db.phone_lines.insert(
 			city_name: string,
 			area_code: string
 		},
-		name: string
+		name: string,
 		last_name: string,
 		dni: string,
 		user_name: string,
@@ -124,7 +124,7 @@ db.bills.insert(
 				city_name: string,
 				area_code: string
 			},
-			name: string
+			name: string,
 			last_name: string,
 			dni: string,
 			user_name: string,
@@ -139,8 +139,8 @@ db.bills.insert(
 	calls_amount: integer,
 	total_cost: decimal,
 	total_price: decimal,
-	bill_date: date,
-	bill_expiration: date,
+	bill_date: new Date("<YYYY-mm-dd>"),
+	bill_expiration: new Date("<YYYY-mm-dd>"),
 	state: ['sent', 'payed', 'expired']
 })
 
@@ -196,7 +196,7 @@ db.phone_calls.insert(
 					city_name: string,
 					area_code: string
 				},
-				name: string
+				name: string,
 				last_name: string,
 				dni: string,
 				user_name: string,
@@ -211,8 +211,8 @@ db.phone_calls.insert(
 		calls_amount: integer,
 		total_cost: decimal,
 		total_price: decimal,
-		bill_date: date,
-		bill_expiration: date,
+		bill_date: new Date("<YYYY-mm-dd>"),
+		bill_expiration: new Date("<YYYY-mm-dd>"),
 		state: ['sent', 'payed', 'expired']
 	},
 	origin_phone_line:
@@ -232,7 +232,7 @@ db.phone_calls.insert(
 				city_name: string,
 				area_code: string
 			},
-			name: string
+			name: string,
 			last_name: string,
 			dni: string,
 			user_name: string,
@@ -261,7 +261,7 @@ db.phone_calls.insert(
 				city_name: string,
 				area_code: string
 			},
-			name: string
+			name: string,
 			last_name: string,
 			dni: string,
 			user_name: string,
@@ -278,6 +278,6 @@ db.phone_calls.insert(
 	total_cost: decimal,
 	total_price: decimal,
 	duration: integer,
-	date_call: datetime
+	date_call: timestamp
 })
 	
