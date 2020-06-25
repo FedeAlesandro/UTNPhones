@@ -28,8 +28,15 @@ public class BillService {
 
     public List<BillsForUsers> getBillsByDateRange(Integer idUser, Date date1, Date date2){
 
-        if (date2 == null) {
+        if (date2 == null)
             date2 = Date.from(Instant.now());
+        else{
+            Date aux;
+            if(date2.before(date1)){
+                aux = date2;
+                date2 = date1;
+                date1 = aux;
+            }
         }
 
         return billRepository.getBillsByDateRange(idUser, date1, date2);

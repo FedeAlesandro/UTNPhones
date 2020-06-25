@@ -37,6 +37,13 @@ public class PhoneCallService {
 
     public List<CallsByDateRange> getCallsByDateRange(Integer idUser, Date date1, Date date2) {
 
+        Date aux;
+        if(date2.before(date1)){
+            aux = date2;
+            date2 = date1;
+            date1 = aux;
+        }
+
         if (!userRepository.existsById(idUser)){
             throw new NotFoundException(USER_NOT_EXIST_ID);
         }

@@ -18,7 +18,7 @@ public interface BillRepository extends JpaRepository<Bill,Integer> {
             " from bills b ;", nativeQuery = true)
     List<BillsWithoutPhoneCalls> getBills();
 
-    @Query(value = "select u.user_name userName, b.calls_amount callsAmount, b.total_price total_price, b.bill_date date, b.bill_expiration dateExpiration\n" +
+    @Query(value = "select u.user_name userName, b.calls_amount callsAmount, b.total_price totalPrice, b.bill_date date, b.bill_expiration dateExpiration\n" +
             "from bills as b\n" +
             "join phone_lines as pl\n" +
             "on b.id_phone_line=pl.id_phone_line\n" +
