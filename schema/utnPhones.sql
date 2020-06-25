@@ -24,7 +24,7 @@ create table users(
     last_name varchar(50),
     dni varchar(10),
     user_name varchar(40) unique,
-    pwd varchar(40),
+    pwd varchar(300),
     user_type enum('employee', 'client', 'infrastructure'),
 	removed_user boolean default false, -- baja logica
     constraint pk_id_user primary key (id_user),
@@ -57,7 +57,7 @@ create table bills(
     total_price decimal,
     bill_date date,
     bill_expiration date,
-    state enum('sent', 'payed', 'expired'), #paga o vencida, puse state porque status es reservada
+    state enum('sent', 'payed', 'expired'), 
 	constraint pk_id_bill primary key (id_bill),
     constraint fk_bills_phone_line foreign key (id_phone_line) references phone_lines (id_phone_line)
 );	
@@ -77,7 +77,7 @@ create table phone_calls(
     constraint fk_phone_calls_tariff foreign key (id_tariff) references tariffs (id_tariff),
     constraint fk_phone_calls_bills foreign key (id_bill) references bills (id_bill),
     constraint fk_phone_calls_origin_phone_line foreign key (id_origin_phone_line) references phone_lines(id_phone_line),
-	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line ) references phone_lines(id_phone_line)
+	constraint fk_phone_calls_destination_phone_line foreign key (id_destination_phone_line) references phone_lines(id_phone_line)
 );
 
 delimiter //
