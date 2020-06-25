@@ -2,10 +2,13 @@ package edu.utn.utnPhones.services;
 
 import edu.utn.utnPhones.exceptions.AlreadyExistsException;
 import edu.utn.utnPhones.exceptions.NotFoundException;
+import edu.utn.utnPhones.exceptions.UnauthorizedUserTypeException;
 import edu.utn.utnPhones.models.PhoneLine;
+import edu.utn.utnPhones.models.User;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoAdd;
 import edu.utn.utnPhones.models.dtos.requests.PhoneLineDtoUpdate;
 import edu.utn.utnPhones.models.enums.PhoneLineStatus;
+import edu.utn.utnPhones.models.enums.UserType;
 import edu.utn.utnPhones.repositories.CityRepository;
 import edu.utn.utnPhones.repositories.PhoneLineRepository;
 import edu.utn.utnPhones.repositories.UserRepository;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 import static edu.utn.utnPhones.utils.Constants.ALREADY_EXISTS_PHONE_LINE;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_AREA_CODE;
 import static edu.utn.utnPhones.utils.Constants.NOT_FOUND_PHONE_LINE;
+import static edu.utn.utnPhones.utils.Constants.UNAUTHORIZED_USER_HANDLING;
 import static edu.utn.utnPhones.utils.Constants.USER_NOT_EXIST;
 
 @Service
@@ -37,10 +41,13 @@ public class PhoneLineService {
 
     public List<PhoneLine> getByUserName(String userName) {
 
-        userRepository.findByUserNameAndRemoved(userName, false)
+        User user = userRepository.findByUserNameAndRemoved(userName, false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
-        List<PhoneLine> phoneLines = phoneLineRepository.getAll();
+        if(user.getUserType() == UserType.infrastructure)
+            throw new UnauthorizedUserTypeException(UNAUTHORIZED_USER_HANDLING);
+
+        List<PhoneLine> phoneLines = phoneLineRepository.findByUserName(userName, false);
 
         return phoneLines.stream()
                 .filter(phoneLine -> !phoneLine.getState().equals(PhoneLineStatus.removed))
@@ -49,8 +56,11 @@ public class PhoneLineService {
 
     public PhoneLine add (PhoneLineDtoAdd phoneLineAdd){
 
-        userRepository.findByIdAndRemoved(phoneLineAdd.getUser().getId(), false)
+        User user = userRepository.findByIdAndRemoved(phoneLineAdd.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
+
+        if(user.getUserType() == UserType.infrastructure)
+            throw new UnauthorizedUserTypeException(UNAUTHORIZED_USER_HANDLING);
 
         cityRepository.findAreaCodeByPhoneNumber(phoneLineAdd.getPhoneNumber())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_AREA_CODE));
@@ -81,13 +91,16 @@ public class PhoneLineService {
         cityRepository.findAreaCodeByPhoneNumber(phoneLineUpdate.getPhoneNumber())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_AREA_CODE));
 
-        if(phoneLineRepository.findByPhoneNumber(phoneLineUpdate.getPhoneNumber()) != null)
-            throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);
+        PhoneLine oldPhoneLine = phoneLineRepository.findByPhoneNumber(phoneLineUpdate.getPhoneNumber());
 
-        userRepository.findByIdAndRemoved(phoneLineUpdate.getUser().getId(), false)
+        if(oldPhoneLine != null)
+            if(!oldPhoneLine.getPhoneNumber().equals(phoneLineUpdate.getPhoneNumber()))
+                throw new AlreadyExistsException(ALREADY_EXISTS_PHONE_LINE);
+
+        User user = userRepository.findByIdAndRemoved(phoneLineUpdate.getUser().getId(), false)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_EXIST));
 
-        phoneLine.setUser(phoneLineUpdate.getUser());
+        phoneLine.setUser(user);
         phoneLine.setPhoneNumber(phoneLineUpdate.getPhoneNumber());
         phoneLine.setLineType(phoneLineUpdate.getLineType());
         phoneLine.setState(phoneLineUpdate.getState());
