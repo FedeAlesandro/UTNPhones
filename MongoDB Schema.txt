@@ -1,0 +1,283 @@
+db.createCollection("provinces")
+
+db.provinces.insert(
+{ 
+	province_name: string
+})
+
+db.createCollection("cities")
+
+db.cities.insert(
+{
+	province:
+	{
+		_id: ObjectId("the object id"),
+		province_name: string
+	},
+	city_name: string,
+	area_code: string
+})
+
+db.createCollection("users")
+
+db.users.insert(
+{
+	city:
+	{
+		_id: ObjectId("the object id"),
+		province:
+		{
+			_id: ObjectId("the object id"),
+			province_name: string
+		},
+		city_name: string,
+		area_code: string
+	},
+	name: string
+	last_name: string,
+	dni: string,
+	user_name: string,
+	pwd: string,
+	user_type: ['employee', 'client', 'infrastructure'],
+	removed_user: boolean
+})
+
+db.createCollection("phone_lines")
+
+db.phone_lines.insert(
+{
+	user:
+	{
+		_id: ObjectId("the object id"),
+		city:
+		{
+			_id: ObjectId("the object id"),
+			province:
+			{
+				_id: ObjectId("the object id"),
+				province_name: string
+			},
+			city_name: string,
+			area_code: string
+		},
+		name: string
+		last_name: string,
+		dni: string,
+		user_name: string,
+		pwd: string,
+		user_type: ['employee', 'client', 'infrastructure'],
+		removed_user: boolean
+	}
+	phone_number: string,
+	line_type: ['mobile', 'home'],
+	state: ['register', 'suspended', 'removed']
+})
+
+db.createCollection("tariffs")
+
+db.tariffs.insert( 
+{
+	origin_city:
+	{
+		_id: ObjectId("the object id"),
+		province:
+		{
+			_id: ObjectId("the object id"),
+			province_name: string
+		},
+		city_name: string,
+		area_code: string
+	},
+	destination_city:
+	{
+		_id: ObjectId("the object id"),
+		province:
+		{
+			_id: ObjectId("the object id"),
+			province_name: string
+		},
+		city_name: string,
+		area_code: string
+	},
+	price_per_minute: float,
+	cost_per_minute: float
+})
+
+db.createCollection("bills")
+
+db.bills.insert(
+{
+	phone_line:
+	{
+		_id: ObjectId("the object id"),
+		user:
+		{
+			_id: ObjectId("the object id"),
+			city:
+			{
+				_id: ObjectId("the object id"),
+				province:
+				{
+					_id: ObjectId("the object id"),
+					province_name: string
+				},
+				city_name: string,
+				area_code: string
+			},
+			name: string
+			last_name: string,
+			dni: string,
+			user_name: string,
+			pwd: string,
+			user_type: ['employee', 'client', 'infrastructure'],
+			removed_user: boolean
+		}
+		phone_number: string,
+		line_type: ['mobile', 'home'],
+		state: ['register', 'suspended', 'removed']
+	},
+	calls_amount: integer,
+	total_cost: decimal,
+	total_price: decimal,
+	bill_date: date,
+	bill_expiration: date,
+	state: ['sent', 'payed', 'expired']
+})
+
+db.createCollection("phone_calls")
+
+db.phone_calls.insert(
+{
+	tariff:
+	{
+		_id: ObjectId("the object id"),
+		origin_city:
+		{
+			_id: ObjectId("the object id"),
+			province:
+			{
+				_id: ObjectId("the object id"),
+				province_name: string
+			},
+			city_name: string,
+			area_code: string
+		},
+		destination_city:
+		{
+			_id: ObjectId("the object id"),
+			province:
+			{
+				_id: ObjectId("the object id"),
+				province_name: string
+			},
+			city_name: string,
+			area_code: string
+		},
+		price_per_minute: float,
+		cost_per_minute: float
+	},
+	bill:
+	{
+		_id: ObjectId("the object id"),
+		phone_line:
+		{
+			_id: ObjectId("the object id"),
+			user:
+			{
+				_id: ObjectId("the object id"),
+				city:
+				{
+					_id: ObjectId("the object id"),
+					province:
+					{
+						_id: ObjectId("the object id"),
+						province_name: string
+					},
+					city_name: string,
+					area_code: string
+				},
+				name: string
+				last_name: string,
+				dni: string,
+				user_name: string,
+				pwd: string,
+				user_type: ['employee', 'client', 'infrastructure'],
+				removed_user: boolean
+			}
+			phone_number: string,
+			line_type: ['mobile', 'home'],
+			state: ['register', 'suspended', 'removed']
+		},
+		calls_amount: integer,
+		total_cost: decimal,
+		total_price: decimal,
+		bill_date: date,
+		bill_expiration: date,
+		state: ['sent', 'payed', 'expired']
+	},
+	origin_phone_line:
+	{
+		_id: ObjectId("the object id"),
+		user:
+		{
+			_id: ObjectId("the object id"),
+			city:
+			{
+				_id: ObjectId("the object id"),
+				province:
+				{
+					_id: ObjectId("the object id"),
+					province_name: string
+				},
+				city_name: string,
+				area_code: string
+			},
+			name: string
+			last_name: string,
+			dni: string,
+			user_name: string,
+			pwd: string,
+			user_type: ['employee', 'client', 'infrastructure'],
+			removed_user: boolean
+		}
+		phone_number: string,
+		line_type: ['mobile', 'home'],
+		state: ['register', 'suspended', 'removed']
+	},
+	destination_phone_line:
+	{
+		_id: ObjectId("the object id"),
+		user:
+		{
+			_id: ObjectId("the object id"),
+			city:
+			{
+				_id: ObjectId("the object id"),
+				province:
+				{
+					_id: ObjectId("the object id"),
+					province_name: string
+				},
+				city_name: string,
+				area_code: string
+			},
+			name: string
+			last_name: string,
+			dni: string,
+			user_name: string,
+			pwd: string,
+			user_type: ['employee', 'client', 'infrastructure'],
+			removed_user: boolean
+		}
+		phone_number: string,
+		line_type: ['mobile', 'home'],
+		state: ['register', 'suspended', 'removed']
+	},
+	origin_phone_number: string,
+	destination_phone_number: string,
+	total_cost: decimal,
+	total_price: decimal,
+	duration: integer,
+	date_call: datetime
+})
+	
